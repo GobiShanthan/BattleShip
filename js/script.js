@@ -10,7 +10,7 @@ cpuAllDivs.addEventListener("click",clickGameHandler)
 
 
 //GAMEBOARD SIZE CHANGE
-let promptValue = 15
+let promptValue = 10
 let gridNum = promptValue 
 let numGrid = gridNum*gridNum
 
@@ -66,6 +66,11 @@ const cpuBoardData ={
 
 }
 
+
+
+
+
+
 //GAME BEGINING
 let gameStart = false
 
@@ -105,11 +110,39 @@ init()
 function init(){
     for(let i =1;i <= numGrid;i++){
        gameBoxResize(i)
+
        cpuBoardData[`${i}`] = 'empty'
+       if(i%promptValue === 0){
+           cpuBoardData[`${i}`] ='Right Edge'
+       }
+       if(i%promptValue -1 === 0){
+        cpuBoardData[`${i}`] ='Left edge'
+       }
+       if(i > 0 && i <= promptValue){
+        cpuBoardData[`${i}`] ='Top edge'
+       }
+       if(i> (promptValue* promptValue - promptValue) && i <promptValue* promptValue){
+           cpuBoardData[`${i}`] ='Bottom edge'
+       }
+       if(i === 1){
+        cpuBoardData[`${i}`] ='topLeftCorner'
+       }
+       if(i === promptValue){
+        cpuBoardData[`${i}`] ='topRightCorner'
+       }
+       if(i === promptValue*promptValue -promptValue){
+        cpuBoardData[`${i}`] ='bottomLeftCorner'
+       }
+       if(i === promptValue*promptValue){
+        cpuBoardData[`${i}`] ='topRightCorner'
+       }
     }
+
 }
 
+// console.log('board remastered',cpuBoardData)
 
+let cpuBoardDataDeleted =  Object.assign({}, cpuBoardData)
 //Display ship
 function shipDisplay(e,ship,color,choiceId){
     document.getElementById(choiceId).style.backgroundColor = color;
@@ -211,15 +244,55 @@ function clickGameHandler(e){
 }
 
 
+
+
+
+
+
+
+
+
+
+
+/////////--------------------------------------------SHIP AI ---------------------------------------////////
+
+
+
+
+
+
+
 ////////////////////////////////////////////////////////////////
 const firstChoiceShipOne = Math.floor(Math.random()* Object.keys(cpuBoardData).length)
-const firstChoiceShipTwo = Math.floor(Math.random()* Object.keys(cpuBoardData).length)
-const firstChoiceShipThree = Math.floor(Math.random()* Object.keys(cpuBoardData).length)
-const firstChoiceShipFour = Math.floor(Math.random()* Object.keys(cpuBoardData).length)
-const firstChoiceShipFive =Math.floor(Math.random()* Object.keys(cpuBoardData).length)
+
+///////////////////////////////////////////////////////////////////////////////
+// ITERATE THROUGH THE OBJECT AND DELETE THE NEW KEYS THAT HAVE SHIPS AND RANDOMIZE LEFT OVER VALUES FOR SECOND SHIP FIRST CHOICE
+let newObjectKeys = Object.keys(cpuBoardDataDeleted)
+let randomNumOfNewArray = Math.floor(Math.random()*newObjectKeys.length)
+const firstChoiceShipTwo = Number(newObjectKeys[randomNumOfNewArray])+1
+//---------------------------------------------------------------------------//
+
+//SHIP 3 
+let newObjectKeys2 = Object.keys(cpuBoardDataDeleted)
+let randomNumOfNewArray2 = Math.floor(Math.random()*newObjectKeys2.length)
+const firstChoiceShipThree = Number(newObjectKeys2[randomNumOfNewArray2])+1
+
 ////////////////////////////////////////////////////////////////
 
+//SHIP 4 
+let newObjectKeys3 = Object.keys(cpuBoardDataDeleted)
+let randomNumOfNewArray3 = Math.floor(Math.random()*newObjectKeys3.length)
+const firstChoiceShipFour = Number(newObjectKeys2[randomNumOfNewArray2])+1
 
+////////////////////////////////////////////////////////////////
+
+//SHIP 5 
+let newObjectKeys4 = Object.keys(cpuBoardDataDeleted)
+let randomNumOfNewArray4 = Math.floor(Math.random()*newObjectKeys4.length)
+const firstChoiceShipFive = Number(newObjectKeys2[randomNumOfNewArray2])+1
+
+
+////////////////////////////////////////////////////////////////
 
 
 let cpuChosenShipsArray =[]
@@ -229,190 +302,496 @@ aiShipPlacement()
 
 
 function aiShipPlacement(){
-    cpuShipMap(cpuShipOne,firstChoiceShipOne,'grey')
-    cpuShipMap(cpuShipTwo,firstChoiceShipTwo,'red')
-    cpuShipMap(cpuShipThree,firstChoiceShipThree,'green')
-    cpuShipMap(cpuShipFour,firstChoiceShipFour,'white')
-    cpuShipMap(cpuShipFive,firstChoiceShipFive,'purple')
+   firstShipFunction(cpuShipOne,firstChoiceShipOne,'grey')
+    secondShipFunction(cpuShipTwo,firstChoiceShipTwo,'red')
+    // thirdShipFunction(cpuShipThree,firstChoiceShipThree,'purple')
+    // fourthShipFunction(cpuShipFour,firstChoiceShipThree,'yellow')
+    // fifthShipFunction(cpuShipFive,firstChoiceShipThree,'cyan')
 }
 
 
 
 
+// function firstShipFunction(){
+//     console.log('shipOne cpu')
+//     console.log(cpuBoardData)
+// }
 
 
 
 
 
 
-function cpuShipMap(ship,firstChoice,color){
-    const nextChoice = Math.floor(Math.random()*4)
 
- if(ship.name === 'shipOne'){
-//step 1 - first random piece anywhere
-    document.getElementById(firstChoice).style.backgroundColor = 'green'
+
+
+
+
+
+
+// first ship
+function firstShipFunction(ship,firstChoice,color){
+
+
+    //step 1 - first random piece anywhere
+    document.getElementById(firstChoice).style.backgroundColor = 'purple'
     cpuBoardData[firstChoice] = ship.name
-
-
-
+    cpuBoardDataDeleted[firstChoice] = ship.name
+    delete cpuBoardDataDeleted[firstChoice] 
 
 //step 2 - Second piece
 
 
 let value = Object.keys(cpuBoardData).find(key => cpuBoardData[key] === 'shipOne');
 
-console.log('right side',value % promptValue === 0)
-console.log('left side',(value -1) % promptValue === 0 )
-console.log('top side',value > 0 && value < promptValue +1)
-console.log('bottom side',value > (promptValue * promptValue) - promptValue && value < (promptValue * promptValue) +1)
+
+
+
+
 
 if(value % promptValue === 0 || (value -1) % promptValue === 0 ||value >0 && value < promptValue +1 || value >(promptValue* promptValue)- promptValue && value < promptValue * promptValue){
     if(value % promptValue === 0){
-        console.log('rightSide')
+
         const rightArray =[2,3,4]
         const newChoiceNum = Math.floor(Math.random()*rightArray.length)
         const newNextChoice = rightArray[newChoiceNum]
 
-
-
-
         nextChoiceAi(firstChoice,1,color,ship,newNextChoice)
     }else if((value -1) % promptValue === 0 ){
-        console.log('leftSide')
+
         let leftArray =[1,3,4]
         const newChoiceNum = Math.floor(Math.random()*leftArray.length)
         const newNextChoice = leftArray[newChoiceNum]
 
 
-
-
-
-
-
         nextChoiceAi(firstChoice,1,color,ship,newNextChoice)
-
-
 
     }else if(value > 0 && value < promptValue +1){
         let topArray =[1,2,3]
         const newChoiceNum = Math.floor(Math.random()*topArray.length)
         const newNextChoice = topArray[newChoiceNum]
-        console.log('topSide')
+
         nextChoiceAi(firstChoice,1,color,ship,newNextChoice)
 
-
-
-
-
-
-
-
     }else if(value > (promptValue * promptValue) - promptValue && value < (promptValue * promptValue) +1){
-        console.log(' bottom side')
+
         let bottomArray = [1,2,4]
         const newChoiceNum = Math.floor(Math.random()*bottomArray.length)
         const newNextChoice = bottomArray[newChoiceNum]
         nextChoiceAi(firstChoice,1,color,ship,newNextChoice)
     }
 
-
 }else{
-    console.log(' in the middle')
+    const nextChoice = Math.floor(Math.random()*4)
     nextChoiceAi(firstChoice,1,color,ship,nextChoice ===0?nextChoice+1:nextChoice)
 
 
 
  }
+}
+
+
+// //////////////////////////////////////////////////////////////////////////SECOND SHIP////////////////////////////////////////////////////////////////////////////////////
 
 
 
-//  else if(ship.name ==='shipTwo' ){
-// if(cpuBoardData[firstChoice] !== 'empty') return
+function secondShipFunction(ship,firstChoice,color){
+
+    const nextChoice = Math.floor(Math.random()*4)
 
 
-//     nextChoiceAi(firstChoice,4,color,'shipTwo',nextChoice)
- 
+//step 1 - first random piece anywhere
+document.getElementById(firstChoice).style.backgroundColor = color
+cpuBoardData[firstChoice] = ship.name
+cpuBoardDataDeleted[firstChoice] = ship.name
+delete cpuBoardDataDeleted[firstChoice] 
+
+//-------------------------------------------------------------------------//
+
+let value = Object.keys(cpuBoardData).find(key => cpuBoardData[key] === 'shipTwo');
+
+// console.log('right side',value % promptValue === 0)
+// console.log('left side',(value -1) % promptValue === 0 )
+// console.log('top side',value > 0 && value < promptValue +1)
+// console.log('bottom side',value > (promptValue * promptValue) - promptValue && value < (promptValue * promptValue) +1)
+
+// step 2 - Finish the ship
+
+
+
+if(value % promptValue === 0 || (value -1) % promptValue === 0 ||value >0 && value < promptValue +1 || value >(promptValue* promptValue)- promptValue && value < promptValue * promptValue){
+    if(value % promptValue === 0){
+
+        const rightArray =[2,3,4]
+        const newChoiceNum = Math.floor(Math.random()*rightArray.length)
+        const newNextChoice = rightArray[newChoiceNum]
+
+        nextChoiceAi(firstChoice,2,color,ship,newNextChoice)
+    }else if((value -1) % promptValue === 0 ){
+
+        let leftArray =[1,3,4]
+        const newChoiceNum = Math.floor(Math.random()*leftArray.length)
+        const newNextChoice = leftArray[newChoiceNum]
+
+
+        nextChoiceAi(firstChoice,2,color,ship,newNextChoice)
+
+    }else if(value > 0 && value < promptValue +1){
+        let topArray =[1,2,3]
+        const newChoiceNum = Math.floor(Math.random()*topArray.length)
+        const newNextChoice = topArray[newChoiceNum]
+
+        nextChoiceAi(firstChoice,2,color,ship,newNextChoice)
+
+    }else if(value > (promptValue * promptValue) - promptValue && value < (promptValue * promptValue) +1){
+
+        let bottomArray = [1,2,4]
+        const newChoiceNum = Math.floor(Math.random()*bottomArray.length)
+        const newNextChoice = bottomArray[newChoiceNum]
+        nextChoiceAi(firstChoice,2,color,ship,newNextChoice)
+    }
+
+}else{
+    nextChoiceAi(firstChoice,2,color,ship,nextChoice === 0?nextChoice +1 :nextChoice)
+ }
+
+
+
+}
+
+
+
+
+
+// function thirdShipFunction(ship,firstChoice,color){
+
+//     const nextChoice = Math.floor(Math.random()*4)
+
+
+// //step 1 - first random piece anywhere
+// document.getElementById(firstChoice).style.backgroundColor = color
+// cpuBoardData[firstChoice] = ship.name
+// cpuBoardDataDeleted[firstChoice] = ship.name
+// delete cpuBoardDataDeleted[firstChoice] 
+
+// //-------------------------------------------------------------------------//
+
+// let value = Object.keys(cpuBoardData).find(key => cpuBoardData[key] === 'shipTwo');
+
+// console.log('right side',value % promptValue === 0)
+// console.log('left side',(value -1) % promptValue === 0 )
+// console.log('top side',value > 0 && value < promptValue +1)
+// console.log('bottom side',value > (promptValue * promptValue) - promptValue && value < (promptValue * promptValue) +1)
+
+// // step 2 - Finish the ship
+
+
+
+// if(value % promptValue === 0 || (value -1) % promptValue === 0 ||value >0 && value < promptValue +1 || value >(promptValue* promptValue)- promptValue && value < promptValue * promptValue){
+//     if(value % promptValue === 0){
+
+//         const rightArray =[2,3,4]
+//         const newChoiceNum = Math.floor(Math.random()*rightArray.length)
+//         const newNextChoice = rightArray[newChoiceNum]
+
+//         nextChoiceAi(firstChoice,3,color,ship,newNextChoice)
+//     }else if((value -1) % promptValue === 0 ){
+
+//         let leftArray =[1,3,4]
+//         const newChoiceNum = Math.floor(Math.random()*leftArray.length)
+//         const newNextChoice = leftArray[newChoiceNum]
+
+
+//         nextChoiceAi(firstChoice,3,color,ship,newNextChoice)
+
+//     }else if(value > 0 && value < promptValue +1){
+//         let topArray =[1,2,3]
+//         const newChoiceNum = Math.floor(Math.random()*topArray.length)
+//         const newNextChoice = topArray[newChoiceNum]
+
+//         nextChoiceAi(firstChoice,3,color,ship,newNextChoice)
+
+//     }else if(value > (promptValue * promptValue) - promptValue && value < (promptValue * promptValue) +1){
+
+//         let bottomArray = [1,2,4]
+//         const newChoiceNum = Math.floor(Math.random()*bottomArray.length)
+//         const newNextChoice = bottomArray[newChoiceNum]
+//         nextChoiceAi(firstChoice,3,color,ship,newNextChoice)
+//     }
+
+// }else{
+//     nextChoiceAi(firstChoice,3,color,ship,nextChoice === 0?nextChoice +1 :nextChoice)
 //  }
-//  else if(ship.name ==='shipThree' ){
 
 
-//     document.getElementById(firstChoice).style.backgroundColor =color
-//     cpuBoardData[firstChoice] = 'shipThree'
-//     cpuShipOne.positions.push(firstChoice)
-//     nextChoiceAi(firstChoice,4,color,'shipThree',nextChoice)
 
-//  }
-//  else if(ship.name ==='shipFour' ){
-
-
-//     document.getElementById(firstChoice).style.backgroundColor =color
-//     cpuBoardData[firstChoice] = 'shipFour'
-//     cpuShipOne.positions.push(firstChoice)
-//     nextChoiceAi(firstChoice,5,color,'shipFour',nextChoice)
-
-//  }
-//  else if(ship.name ==='shipFive' ){
-
-
-//     // if(firstChoice < promptValue -5){console.log('you cant go right',firstChoice)}
-//     document.getElementById(firstChoice).style.backgroundColor =color
-//     cpuBoardData[firstChoice] = 'shipFive'
-//     cpuShipOne.positions.push(firstChoice)
-//     nextChoiceAi(firstChoice,6,color,'shipFive',nextChoice)
-
-
-//     console.log(cpuBoardData)
- 
 // }
 
+
+
+
+
+// function fourthShipFunction(ship,firstChoice,color){
+
+//     const nextChoice = Math.floor(Math.random()*4)
+
+
+// //step 1 - first random piece anywhere
+// document.getElementById(firstChoice).style.backgroundColor = color
+// cpuBoardData[firstChoice] = ship.name
+// cpuBoardDataDeleted[firstChoice] = ship.name
+// delete cpuBoardDataDeleted[firstChoice] 
+
+// //-------------------------------------------------------------------------//
+
+// let value = Object.keys(cpuBoardData).find(key => cpuBoardData[key] === 'shipTwo');
+
+// console.log('right side',value % promptValue === 0)
+// console.log('left side',(value -1) % promptValue === 0 )
+// console.log('top side',value > 0 && value < promptValue +1)
+// console.log('bottom side',value > (promptValue * promptValue) - promptValue && value < (promptValue * promptValue) +1)
+
+// // step 2 - Finish the ship
+
+
+
+// if(value % promptValue === 0 || (value -1) % promptValue === 0 ||value >0 && value < promptValue +1 || value >(promptValue* promptValue)- promptValue && value < promptValue * promptValue){
+//     if(value % promptValue === 0){
+
+//         const rightArray =[2,3,4]
+//         const newChoiceNum = Math.floor(Math.random()*rightArray.length)
+//         const newNextChoice = rightArray[newChoiceNum]
+
+//         nextChoiceAi(firstChoice,4,color,ship,newNextChoice)
+//     }else if((value -1) % promptValue === 0 ){
+
+//         let leftArray =[1,3,4]
+//         const newChoiceNum = Math.floor(Math.random()*leftArray.length)
+//         const newNextChoice = leftArray[newChoiceNum]
+
+
+//         nextChoiceAi(firstChoice,4,color,ship,newNextChoice)
+
+//     }else if(value > 0 && value < promptValue +1){
+//         let topArray =[1,2,3]
+//         const newChoiceNum = Math.floor(Math.random()*topArray.length)
+//         const newNextChoice = topArray[newChoiceNum]
+
+//         nextChoiceAi(firstChoice,4,color,ship,newNextChoice)
+
+//     }else if(value > (promptValue * promptValue) - promptValue && value < (promptValue * promptValue) +1){
+
+//         let bottomArray = [1,2,4]
+//         const newChoiceNum = Math.floor(Math.random()*bottomArray.length)
+//         const newNextChoice = bottomArray[newChoiceNum]
+//         nextChoiceAi(firstChoice,4,color,ship,newNextChoice)
+//     }
+
+// }else{
+//     nextChoiceAi(firstChoice,4,color,ship,nextChoice === 0?nextChoice +1 :nextChoice)
+//  }
+
+
+
+// }
+
+
+// function fifthShipFunction(ship,firstChoice,color){
+
+//     const nextChoice = Math.floor(Math.random()*4)
+
+
+// //step 1 - first random piece anywhere
+// document.getElementById(firstChoice).style.backgroundColor = color
+// cpuBoardData[firstChoice] = ship.name
+// cpuBoardDataDeleted[firstChoice] = ship.name
+// delete cpuBoardDataDeleted[firstChoice] 
+
+// //-------------------------------------------------------------------------//
+
+// let value = Object.keys(cpuBoardData).find(key => cpuBoardData[key] === 'shipTwo');
+
+// console.log('right side',value % promptValue === 0)
+// console.log('left side',(value -1) % promptValue === 0 )
+// console.log('top side',value > 0 && value < promptValue +1)
+// console.log('bottom side',value > (promptValue * promptValue) - promptValue && value < (promptValue * promptValue) +1)
+
+// // step 2 - Finish the ship
+
+
+
+// if(value % promptValue === 0 || (value -1) % promptValue === 0 ||value >0 && value < promptValue +1 || value >(promptValue* promptValue)- promptValue && value < promptValue * promptValue){
+//     if(value % promptValue === 0){
+
+//         const rightArray =[2,3,4]
+//         const newChoiceNum = Math.floor(Math.random()*rightArray.length)
+//         const newNextChoice = rightArray[newChoiceNum]
+
+//         nextChoiceAi(firstChoice,5,color,ship,newNextChoice)
+//     }else if((value -1) % promptValue === 0 ){
+
+//         let leftArray =[1,3,4]
+//         const newChoiceNum = Math.floor(Math.random()*leftArray.length)
+//         const newNextChoice = leftArray[newChoiceNum]
+
+
+//         nextChoiceAi(firstChoice,5,color,ship,newNextChoice)
+
+//     }else if(value > 0 && value < promptValue +1){
+//         let topArray =[1,2,3]
+//         const newChoiceNum = Math.floor(Math.random()*topArray.length)
+//         const newNextChoice = topArray[newChoiceNum]
+
+//         nextChoiceAi(firstChoice,5,color,ship,newNextChoice)
+
+//     }else if(value > (promptValue * promptValue) - promptValue && value < (promptValue * promptValue) +1){
+
+//         let bottomArray = [1,2,4]
+//         const newChoiceNum = Math.floor(Math.random()*bottomArray.length)
+//         const newNextChoice = bottomArray[newChoiceNum]
+//         nextChoiceAi(firstChoice,5,color,ship,newNextChoice)
+//     }
+
+// }else{
+//     nextChoiceAi(firstChoice,5,color,ship,nextChoice === 0?nextChoice +1 :nextChoice)
+//  }
+
+
+
+// }
+
+
+
+
+function checkIfEmpty(nextChoice,num,firstChoice){
+    let arr=[] 
+    let arrValues=[]
+
+
+    if(nextChoice === 1){
+
+        for(let i = 1 ; i <= num; i++){
+            arr.push(cpuBoardData[firstChoice + i])
+            arrValues.push(firstChoice + i)
+        
+        }
+
+    }else if (nextChoice === 2){
+
+        for(let i = 1; i <=num ; i++){
+            arr.push(cpuBoardData[firstChoice - i])
+            arrValues.push(firstChoice - i)
+        }
+
+    }else if (nextChoice === 3){
+
+        for(let i = 1; i <=num ; i++){
+            arr.push(cpuBoardData[firstChoice + promptValue * i])
+            arrValues.push(firstChoice + promptValue * i)
+
+        }
+    }else if (nextChoice === 4){
+
+        for(let i = 1 ; i <= num; i++){
+            arr.push(cpuBoardData[firstChoice - promptValue * i])
+            arrValues.push(firstChoice - promptValue * i)
+
+        }
+
+    }
+console.log(arr)
+let isUndefined = arr.includes(undefined)
+console.log('isUndefined',isUndefined)
+let isEmpty = !isUndefined  ? arr.every((val) =>val.slice(0,4) !== 'ship' ):false
+
+console.log('isEmpty',isEmpty)
+console.log('values',arrValues)
+console.log(arr.length,num)
+
+
+
+
+
+let proceed ={
+    run:false,
+    values:[]
+} 
+let overAndUnderValue = arrValues.every(el=>el >0 && el <=100)
+console.log(overAndUnderValue,'just over and under<<<<<<<<-------------')
+
+//pushing arrValues into proceed values
+proceed.values.push( isEmpty && arr.length === num && !isUndefined && overAndUnderValue?arrValues:null)
+
+let valuesCheck = proceed.values.length > 0
+console.log('this is the values property',valuesCheck)
+
+proceed.run = isEmpty && arr.length === num && !isUndefined && overAndUnderValue && valuesCheck ?true:false
+console.log(proceed.run,'full proceed<<<<<<<<-------------')
+  return proceed
+
 }
+
+function generateNewNumberCpuBoard(){
+    return Math.floor(Math.random()*Object.keys(cpuBoardData).length)
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // //NEXT CHOICE TO DECIDE WHAT DIRECTION THE AI WILL GO WITH THE PEICES
 function nextChoiceAi (firstChoice,num,color,ship,nextChoice){
-    let arr=[]
+  
+let proceed = checkIfEmpty(nextChoice,num,firstChoice)
 
 
-    for(let i =1;i <= num; i++){
+let iterations =0
 
-        if(nextChoice === 1){
+            while(!proceed.run){
 
-                document.getElementById(firstChoice+i).style.backgroundColor =color
-                cpuBoardData[firstChoice+i] = ship.name
 
-        }
-        if(nextChoice ===2){
 
-                document.getElementById(firstChoice-i).style.backgroundColor =color
-                cpuBoardData[firstChoice +i] = ship.name
-        }
-        if (nextChoice === 3){
+                if(iterations>6){
+                    let newRandom = Math.floor(Math.random()*4)+1
+                    let = allCpuEntries =  Object.entries(cpuBoardData)
+                    let availableValues = allCpuEntries.filter(val=>val[1].slice(0,4) !== 'ship')
+                    let newFirstNumb = Math.floor(Math.random()* availableValues.length)
 
-                document.getElementById(firstChoice + promptValue * i).style.backgroundColor =color
-                cpuBoardData[firstChoice + promptValue * i ] = ship.name
+                    let newFirstChoice = availableValues[newFirstNumb]
+                   
+                    proceed = checkIfEmpty(newRandom,num, Number(newFirstChoice[0]))
+                
+                    console.log('iterations',iterations)
+                    iterations++
+                    console.log('iterations',iterations)
+                }else{
+                    let newRandom = Math.floor(Math.random()*4)+1
+                    proceed = checkIfEmpty(newRandom,num,firstChoice)
+                    iterations++
+                    console.log('iterations',iterations)
+                }
+            
+            }
 
-        }
-        if (nextChoice ===4){
 
-                document.getElementById(firstChoice - promptValue * i).style.backgroundColor =color
-                cpuBoardData[firstChoice - promptValue * i] = ship.name
+ 
 
-        }
-    }
+    console.log(proceed.run,' i can proceed with the plotting of ships')
+if(proceed.run){
+    console.log('i am running the ship function')
+if(proceed.values.length >0){
+for(let i = 0 ; i < proceed.values[0].length;i++){
+    document.getElementById(proceed.values[0][i]).style.backgroundColor =color
+                cpuBoardData[proceed.values[0][i]] = ship.name
+                cpuBoardDataDeleted[proceed.values[0][i]] = ship.name
+                delete cpuBoardDataDeleted[proceed.values[0][i]]
+
+
+
+}
+
+}
+}
+
+
+
 
 
 }
