@@ -1,10 +1,12 @@
 
-
+//GAME BOARD CONTAINER 
 const cpuAllDivs = document.getElementById('cpu-board')
+
+//ALL DIVS FETCHED BY CLASS
 const gameBoard = document.querySelector('.board')
 
 
-//eventHandlers 
+// EVENT HANDLERS 
 cpuAllDivs.addEventListener("click",clickGameHandler)
 
 
@@ -38,7 +40,7 @@ const topBorder = []
 const bottomBorder = []
 
 
-
+// GET BOARDER FOR ALL BOARDS REGARDLESS OF LENGTH OF SIDES AND PUSH INTO ARRAYS ON TOP
 function getBoarderNums(){
 
     for(let i = 1; i <= promptValue; i++){
@@ -53,6 +55,8 @@ function getBoarderNums(){
 
 }
 
+
+
 getBoarderNums()
 
 
@@ -61,19 +65,18 @@ getBoarderNums()
 
 
 
-//STATE 
+// OBJECT GAME BOARD (LOL NEVER AGAIN........ MABY)
 const cpuBoardData ={
 
 }
 
-
-
-
-/*---------------------------------------------------------------SHIP CLASS SETUP--------------------------------------------*/
-
-//GAME BEGINING
+//GAME BEGINING BEGINING STATE
 let gameStart = false
 
+
+
+/*---------------------------------------------------------------SHIP CLASS SETUP START --------------------------------------------*/
+//SHIP CLASS
 class Ship{
     constructor(name,positions,spaces,remaining){
         this.name = name
@@ -84,7 +87,7 @@ class Ship{
 }
 
 
-// CREATED SHIP CLASSES
+// CREATED SHIP PLAYER
 let shipOne = new Ship('shipOne',[],2,2)
 let shipTwo = new Ship('shipTwo',[],3,3)
 let shipThree = new Ship('shipThree',[],4,4)
@@ -92,8 +95,7 @@ let shipFour = new Ship('shipFour',[],5,5)
 let shipFive = new Ship('shipFive',[],6,6)
 
 
-//CPU SHIPS
-
+//CREATED SHIP AI (CPU)
 let cpuShipOne = new Ship('shipOne',[],2,2)
 let cpuShipTwo = new Ship('shipTwo',[],3,3)
 let cpuShipThree = new Ship('shipThree',[],4,4)
@@ -102,7 +104,7 @@ let cpuShipFive = new Ship('shipFive',[],6,6)
 
 
 
-/*---------------------------------------------------------------SHIP CLASS SETUP--------------------------------------------*/
+/*---------------------------------------------------------------SHIP CLASS SETUP END --------------------------------------------*/
 
 
 
@@ -114,7 +116,7 @@ let cpuShipFive = new Ship('shipFive',[],6,6)
 init()
 
 
-//BOARD INIT
+//BOARD INIT &&  PUSH ALL EMPTY AND BORDER VALUES INTO GAME 
 function init(){
     for(let i =1;i <= numGrid;i++){
        gameBoxResize(i)
@@ -142,7 +144,7 @@ function init(){
         cpuBoardData[`${i}`] ='bottomLeftCorner'
        }
        if(i === promptValue*promptValue){
-        cpuBoardData[`${i}`] ='topRightCorner'
+        cpuBoardData[`${i}`] ='bottomRightCorner'
        }
     }
 
@@ -296,7 +298,7 @@ console.log(availableValues2,'third ship-----------------------------')
 let cpuChosenShipsArray =[]
 
 
-aiShipPlacement()
+
 
 
 function aiShipPlacement(){
@@ -307,13 +309,8 @@ function aiShipPlacement(){
     fifthShipFunction(cpuShipFive,'cyan')
 }
 
+aiShipPlacement()
 
-
-
-// function firstShipFunction(){
-//     console.log('shipOne cpu')
-//     console.log(cpuBoardData)
-// }
 
 
 
@@ -578,22 +575,11 @@ function fourthShipFunction(ship,color){
     let newFirstNumb = Math.floor(Math.random()* availableValues.length)
     let firstChoice = availableValues[newFirstNumb][0]
 
-//step 1 - first random piece anywhere
-// document.getElementById(firstChoice).style.backgroundColor = color
-// cpuBoardData[firstChoice] = ship.name
-// cpuBoardDataDeleted[firstChoice] = ship.name
-// delete cpuBoardDataDeleted[firstChoice] 
+
 
 //-------------------------------------------------------------------------//
 
 let value = firstChoice;
-
-// console.log('right side',value % promptValue === 0)
-// console.log('left side',(value -1) % promptValue === 0 )
-// console.log('top side',value > 0 && value < promptValue +1)
-// console.log('bottom side',value > (promptValue * promptValue) - promptValue && value < (promptValue * promptValue) +1)
-
-// step 2 - Finish the ship
 
 
 
@@ -636,7 +622,7 @@ if(value % promptValue === 0 || (value -1) % promptValue === 0 ||value >0 && val
 
 
 }
-////////////////////////////////////////////////////////////////////////////FOURTH SHIP START////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////FOURTH SHIP END////////////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -647,31 +633,15 @@ if(value % promptValue === 0 || (value -1) % promptValue === 0 ||value >0 && val
 ////////////////////////////////////////////////////////////////////////////FIVE SHIP START////////////////////////////////////////////////////////////////////////////////////
 function fifthShipFunction(ship,color){
 
-
+    //RANDOM BOARD NUMBER CHECK ON EACH SHIP
     let allCpuEntries =  Object.entries(cpuBoardData)
     let availableValues = allCpuEntries.filter(val=>val[1].slice(0,4) !== 'ship')
     let newFirstNumb = Math.floor(Math.random()* availableValues.length)
     let firstChoice = availableValues[newFirstNumb][0]
     const nextChoice = Math.floor(Math.random()*4)
 
-
-// //step 1 - first random piece anywhere
-// document.getElementById(firstChoice).style.backgroundColor = color
-// cpuBoardData[firstChoice] = ship.name
-// cpuBoardDataDeleted[firstChoice] = ship.name
-// delete cpuBoardDataDeleted[firstChoice] 
-
 //-------------------------------------------------------------------------//
-
 let value = firstChoice
-
-// console.log('right side',value % promptValue === 0)
-// console.log('left side',(value -1) % promptValue === 0 )
-// console.log('top side',value > 0 && value < promptValue +1)
-// console.log('bottom side',value > (promptValue * promptValue) - promptValue && value < (promptValue * promptValue) +1)
-
-// // step 2 - Finish the ship
-
 
 
 if(value % promptValue === 0 || (value -1) % promptValue === 0 ||value >0 && value < promptValue +1 || value >(promptValue* promptValue)- promptValue && value < promptValue * promptValue){
@@ -714,14 +684,14 @@ if(value % promptValue === 0 || (value -1) % promptValue === 0 ||value >0 && val
 
 }
 
-////////////////////////////////////////////////////////////////////////////FIVE SHIP START////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////FIVE SHIP END////////////////////////////////////////////////////////////////////////////////////
 
 
 
 
 
 
-
+//FUNCTION TO CHECK IF THE NEXT SPACES FOR SHIP IS (EMPTY, INVALID, OVER AND UNDER BOARD LENGTH)
 function checkIfEmpty(nextChoice,num,firstChoice){
     let arr=[] 
     let arrValues=[]
@@ -758,14 +728,28 @@ function checkIfEmpty(nextChoice,num,firstChoice){
         }
 
     }
-console.log(arr)
+// console.log(arr)
 let isUndefined = arr.includes(undefined)
-console.log('isUndefined',isUndefined)
+// console.log('isUndefined',isUndefined)
 let isEmpty = !isUndefined  ? arr.every((val) =>val.slice(0,4) !== 'ship' ):false
 
-console.log('isEmpty',isEmpty)
-console.log('values',arrValues)
-console.log(arr.length,num)
+// console.log('isEmpty',isEmpty)
+// console.log('values',arrValues)
+// console.log(arr.length,num)
+
+
+let isOnEdge = arr.includes('Right Edge') && arr.includes('Left edge')?true:false;
+console.log(isOnEdge,'<-------------------left to right--------------')
+
+
+let isOnTopRight = arr.includes('topRightCorner') && arr.includes('Left edge')?true:false;
+console.log(isOnEdge,'<-------------------left to right--------------')
+
+
+let isOnBottomLeft = arr.includes('bottomLeftCorner') && arr.includes('Right Edge')?true:false;
+console.log(isOnEdge,'<-------------------left to right--------------')
+
+
 
 
 
@@ -775,8 +759,8 @@ let proceed ={
     run:false,
     values:[]
 } 
-let overAndUnderValue = arrValues.every(el=>el >0 && el <=100)
-console.log(overAndUnderValue,'just over and under<<<<<<<<-------------')
+let overAndUnderValue = arrValues.every(el=>el >0 && el <= promptValue *promptValue)
+console.log(overAndUnderValue,'just over and under')
 
 //pushing arrValues into proceed values
 proceed.values.push( isEmpty && arr.length === num && !isUndefined && overAndUnderValue?arrValues:null)
@@ -784,16 +768,28 @@ proceed.values.push( isEmpty && arr.length === num && !isUndefined && overAndUnd
 let valuesCheck = proceed.values.length > 0
 console.log('this is the values property',valuesCheck)
 
-proceed.run = isEmpty && arr.length === num && !isUndefined && overAndUnderValue && valuesCheck ?true:false
-console.log(proceed.run,'full proceed<<<<<<<<-------------')
+proceed.run = isEmpty && arr.length === num && !isUndefined && overAndUnderValue && valuesCheck && !isOnEdge && !isOnTopRight && !isOnBottomLeft ?true:false
+console.log(proceed.run,'full proceed')
   return proceed
 
 }
 
-function generateNewNumberCpuBoard(){
-    return Math.floor(Math.random()*Object.keys(cpuBoardData).length)
 
-}
+
+
+
+
+// function generateNewNumberCpuBoard(){
+//     return Math.floor(Math.random()*Object.keys(cpuBoardData).length)
+
+// }
+
+
+
+
+
+
+
 
 // //NEXT CHOICE TO DECIDE WHAT DIRECTION THE AI WILL GO WITH THE PEICES
 function nextChoiceAi (firstChoice,num,color,ship,nextChoice){
@@ -852,7 +848,7 @@ for(let i = 0 ; i < proceed.values[0].length;i++){
 
 
 
-
+console.log(cpuBoardData)
 }
 
 
