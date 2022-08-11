@@ -2,17 +2,27 @@
 //GAME BOARD CPU CONTAINER 
 const cpuAllDivs = document.getElementById('cpu-board')
 
-
-
 //GAME BOARD PLAYER CONTAINER 
 const playerAllDivs = document.getElementById('player-board')
-//ALL DIVS FETCHED BY CLASS
+
+const cpuShipOneDiv = document.getElementById('cpuS1')
+const cpuShipTwoDiv = document.getElementById('cpuS2')
+const cpuShipThreeDiv = document.getElementById('cpuS3')
+const cpuShipFourDiv = document.getElementById('cpuS4')
+const cpuShipFiveDiv = document.getElementById('cpuS5')
 
 
+
+
+
+
+
+
+// EVENT HANDLER PLAYER BOARD 
+playerAllDivs.addEventListener("click",clickGameHandler)
 
 // EVENT HANDLERS 
-cpuAllDivs.addEventListener("click",clickGameHandler)
-
+cpuAllDivs.addEventListener("click",clickCpuBoardHandler)
 
 
 //GAMEBOARD SIZE CHANGE
@@ -21,7 +31,7 @@ let gridNum = promptValue
 let numGrid = gridNum*gridNum
 
 
-// GAMEBOARD FUNCTION
+// CPU GAME BOX
 function gameBoxCpuResize(i){
     let gameDiv = document.createElement('div')
     gameDiv.setAttribute('id',`${i}`)
@@ -33,9 +43,11 @@ function gameBoxCpuResize(i){
     cpuAllDivs.append(gameDiv)
 }
 
+
+//PLAYER GAME BOX
 function gameBoxPlayerResize(i){
     let gameDiv = document.createElement('div')
-    gameDiv.setAttribute('id',`${i}`)
+    gameDiv.setAttribute('id',`p${i}`)
     gameDiv.classList.add('inner-box')
     gameDiv.style.width = `${gridNum/10 *50}px`;
     gameDiv.style.height = `${gridNum/10 *50}px`;
@@ -47,7 +59,7 @@ function gameBoxPlayerResize(i){
 
 /*--------------------------------------------------------------GET BORDER VALUES---------------------------------------------*/
 
-
+// ARRAYS FOR BORDER CHECK
 const rightBorder = []
 const leftBorder = []
 const topBorder = []
@@ -103,7 +115,14 @@ class Ship{
         this.name = name
         this.remaining = remaining 
         this.positions = positions
-        this.spaces = spaces  
+        this.alive = true
+    }
+
+    hit(){
+        this.remaining--
+    }
+    isDead(){
+        this.alive = false
     }
 }
 
@@ -137,46 +156,46 @@ let cpuShipFive = new Ship('shipFive',[],6,6)
 init()
 
 
-//BOARD INIT &&  PUSH ALL EMPTY AND BORDER VALUES INTO GAME 
+//CPU AND PLAYER BOARD INIT &&  PUSH ALL EMPTY AND BORDER VALUES INTO GAME 
 function init(){
     for(let i =1;i <= numGrid;i++){
        gameBoxCpuResize(i)
        gameBoxPlayerResize(i)
 
        cpuBoardData[`${i}`] = 'empty'
-       playerBoardData[`${i}`] = 'empty'
+       playerBoardData[`p${i}`] = 'empty'
 
        if(i%promptValue === 0){
            cpuBoardData[`${i}`] ='Right Edge'
-           playerBoardData[`${i}`] ='Right Edge'
+           playerBoardData[`p${i}`] ='Right Edge'
        }
        if(i%promptValue -1 === 0){
         cpuBoardData[`${i}`] ='Left edge'
-        playerBoardData[`${i}`] ='Left edge'
+        playerBoardData[`p${i}`] ='Left edge'
        }
        if(i > 0 && i <= promptValue){
         cpuBoardData[`${i}`] ='Top edge'
-        playerBoardData[`${i}`] ='Top edge'
+        playerBoardData[`p${i}`] ='Top edge'
        }
        if(i> (promptValue* promptValue - promptValue) && i <promptValue* promptValue){
            cpuBoardData[`${i}`] ='Bottom edge'
-           playerBoardData[`${i}`] ='Bottom edge'
+           playerBoardData[`p${i}`] ='Bottom edge'
        }
        if(i === 1){
         cpuBoardData[`${i}`] ='topLeftCorner'
-        playerBoardData[`${i}`] ='topLeftCorner'
+        playerBoardData[`p${i}`] ='topLeftCorner'
        }
        if(i === promptValue){
         cpuBoardData[`${i}`] ='topRightCorner'
-        playerBoardData[`${i}`] ='topRightCorner'
+        playerBoardData[`p${i}`] ='topRightCorner'
        }
        if(i === promptValue * promptValue - (promptValue -1)){
         cpuBoardData[`${i}`] = 'bottomLeftCorner'
-        playerBoardData[`${i}`] = 'bottomLeftCorner'
+        playerBoardData[`p${i}`] = 'bottomLeftCorner'
        }
        if(i === promptValue*promptValue){
         cpuBoardData[`${i}`] ='bottomRightCorner'
-        playerBoardData[`${i}`] ='bottomRightCorner'
+        playerBoardData[`p${i}`] ='bottomRightCorner'
        }
     }
 
@@ -193,8 +212,8 @@ let cpuBoardDataDeleted =  Object.assign({}, cpuBoardData)
 
 //DISPLAY SHIP FUNCTION 
 function shipDisplay(e,ship,color,choiceId){
-    document.getElementById(choiceId).style.backgroundColor = color;
-    cpuBoardData[`${choiceId}`] =`${ship.name} ${ship.remaining} of ${ship.spaces}`
+    document.getElementById(`p${choiceId}`).style.backgroundColor = color;
+    playerBoardData[`p${choiceId}`] =`${ship.name} ${ship.remaining} of ${ship.spaces}`
     ship.positions.push(choiceId)
     ship.remaining = ship.remaining -1
 }
@@ -204,8 +223,9 @@ function shipDisplay(e,ship,color,choiceId){
 function shipPlacement(e,ship,color,){
 
     // cached values 
-    const choiceId = Number(e.target.id)
-    const lastPosition = Number(ship.positions[ship.positions.length-1])
+   
+    const choiceId = Number(e.target.id.split('p')[1])
+    const lastPosition = ship.positions[ship.positions.length-1]
     const firstPosition = Number(ship.positions[0])
     const lowestNumber = Math.min(...ship.positions)
     const highestNumber = Math.max(...ship.positions)
@@ -216,8 +236,9 @@ function shipPlacement(e,ship,color,){
     const compareFirstLast = Math.abs(firstPosition - lastPosition)
 
 //handles ship one
+
 if(ship.name === 'shipOne'){
-    if(ship.positions.length<1){
+    if(ship.positions.length < 1){
         shipDisplay(e,ship,color,choiceId)
     }else{
         if(notXPosition )return 
@@ -243,13 +264,19 @@ if(ship.name === 'shipOne'){
 }
 
 
+
+/////////--------------------------------------------CLICK HANDLER FOR BOARDS START ---------------------------------------////////
+
+
 // CLICK HANDLER FOR USERS SHIP AND USER GUESSING GAME
 function clickGameHandler(e){
-    if(e.target.id ==='cpu-board') return ;
-    if(cpuBoardData[e.target.id] !== 'empty' && cpuBoardData[e.target.id] !== 'miss' && cpuBoardData[e.target.id] !== 'hit') return;
 
-    let randomNum = Math.floor(Math.random()* Object.keys(cpuBoardData).length)
 
+    if(e.target.id === 'player-board') return ;
+
+    if(playerBoardData[e.target.id] === 'miss' && playerBoardData[e.target.id] === 'hit' && playerBoardData[e.target.id].slice(0,4)==='ship' ) return;
+    console.log(playerBoardData[e.target.id])
+    // let randomNum = Math.floor(Math.random()* Object.keys(playerBoardData).length)
 
     if(!gameStart){
         if(shipOne.remaining > 0){
@@ -272,28 +299,109 @@ function clickGameHandler(e){
             shipPlacement(e,shipFive,'black')
         }
         else{
-            if(cpuBoardData[e.target.id] !== 'miss' && cpuBoardData[e.target.id] !== 'hit' && cpuBoardData[e.target.id] !== 'empty'){
-
-                document.getElementById(e.target.id).style.backgroundColor ='orange'
-                cpuBoardData[e.target.id] = 'hit'
-            }else{
-                if(cpuBoardData[e.target.id] === 'empty'){
-                    document.getElementById(e.target.id).style.backgroundColor = 'red'
-                    cpuBoardData[e.target.id] = 'miss'
-                }
-
-            }
+          console.log('You cant click on your boards anymore')
         }
 
     }
 
-    console.log(cpuBoardData)
 
 }
 
 
 
 
+// CLICK HANDLER FOR CPU SHIP AND USER GUESSING GAME
+function clickCpuBoardHandler(e){
+
+    let myChoice = e.target.id
+
+        if(cpuBoardData[myChoice] ==='cpu-board' || cpuBoardData[myChoice]=== 'miss' || cpuBoardData[myChoice] === 'hit') return;
+
+        console.log(e.target.id)
+     
+        if(cpuBoardData[myChoice] !=='hit' && cpuBoardData[myChoice].slice(0,4) ==='ship'){
+            
+            
+            document.getElementById(e.target.id).style.backgroundColor ='orange'
+            if(cpuBoardData[myChoice] ==='shipOne'){
+                if(shipOne.alive){
+                    shipOne.hit()
+                    cpuBoardData[myChoice] = 'hit'
+                    if(shipOne.remaining === 0){
+                      cpuShipOneDiv.innerText ='SHIP ONE IS DEAD'
+                      shipOne.isDead()
+                    }
+                }else{
+                    return
+                }
+
+            }
+            if(cpuBoardData[myChoice] ==='shipTwo'){
+                if(shipTwo.alive){
+                    shipTwo.hit()
+                    cpuBoardData[myChoice] = 'hit'
+                    if(shipTwo.remaining === 0){
+                      cpuShipTwoDiv.innerText ='SHIP Two IS DEAD'
+                      shipTwo.isDead()
+                    }
+                }else{
+                    return
+                }
+            }
+            if(cpuBoardData[myChoice] ==='shipThree'){
+                if(shipThree.alive){
+                    shipThree.hit()
+                    cpuBoardData[myChoice] = 'hit'
+                    if(shipThree.remaining === 0){
+                      cpuShipThreeDiv.innerText ='SHIP Three IS DEAD'
+                      shipThree.isDead()
+                    }
+                }else{
+                    return
+                }
+            }
+            if(cpuBoardData[myChoice] ==='shipFour'){
+                if(shipFour.alive){
+                    shipFour.hit()
+                    cpuBoardData[myChoice] = 'hit'
+                    if(shipFour.remaining === 0){
+                      cpuShipFourDiv.innerText ='SHIP Four IS DEAD'
+                      shipFour.isDead()
+                    }
+                }else{
+                    return
+                }
+            }   
+            if(cpuBoardData[myChoice] ==='shipFive'){
+                if(shipFive.alive){
+                    shipFive.hit()
+                    cpuBoardData[myChoice] = 'hit'
+                    if(shipFive.remaining === 0){
+                      cpuShipFiveDiv.innerText ='SHIP Five IS DEAD'
+                      shipFive.isDead()
+                    }
+                }else{
+                    return
+                }
+            }
+
+            // cpuBoardData[myChoice] ='hit'
+            
+        }else{
+            cpuBoardData[myChoice] ='miss'
+            document.getElementById(e.target.id).style.backgroundColor ='red'
+           
+        }
+
+}
+
+
+
+
+
+
+
+/////////--------------------------------------------CLICK HANDLER FOR BOARDS END ---------------------------------------////////
 
 
 
@@ -305,32 +413,10 @@ function clickGameHandler(e){
 /////////--------------------------------------------SHIP AI ---------------------------------------////////
 
 
-//SHIP 3 
-let newRandom2 = Math.floor(Math.random()*4)+1
-let allCpuEntries2 =  Object.entries(cpuBoardData)
-let availableValues2 = allCpuEntries2.filter(val=>val[1].slice(0,4) !== 'ship')
-let newFirstNumb2 = Math.floor(Math.random()* availableValues2.length)
-let thirdShipFirstChoice = availableValues2[newFirstNumb2][0]
 
-
-////////////////////////////////////////////////////////////////
-
-//SHIP 4 
-
-
-////////////////////////////////////////////////////////////////
-
-//SHIP 5 
-
-
-
-////////////////////////////////////////////////////////////////
 
 
 let cpuChosenShipsArray =[]
-
-
-
 
 
 function aiShipPlacement(){
