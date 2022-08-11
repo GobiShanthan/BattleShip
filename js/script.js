@@ -1,9 +1,13 @@
 
-//GAME BOARD CONTAINER 
+//GAME BOARD CPU CONTAINER 
 const cpuAllDivs = document.getElementById('cpu-board')
 
+
+
+//GAME BOARD PLAYER CONTAINER 
+const playerAllDivs = document.getElementById('player-board')
 //ALL DIVS FETCHED BY CLASS
-const gameBoard = document.querySelector('.board')
+
 
 
 // EVENT HANDLERS 
@@ -18,17 +22,27 @@ let numGrid = gridNum*gridNum
 
 
 // GAMEBOARD FUNCTION
-function gameBoxResize(i){
+function gameBoxCpuResize(i){
     let gameDiv = document.createElement('div')
     gameDiv.setAttribute('id',`${i}`)
     gameDiv.classList.add('inner-box')
     gameDiv.style.width = `${gridNum/10 *50}px`;
     gameDiv.style.height = `${gridNum/10 *50}px`;
-    gameBoard.style.width =`${numGrid*5}px`;
-    gameBoard.style.height =`${numGrid*5}px`;
+    cpuAllDivs.style.gridTemplateColumns =`repeat(${promptValue},1fr)`;
+    cpuAllDivs.style.gridTemplateRows =`repeat(${promptValue},1fr)`;
     cpuAllDivs.append(gameDiv)
 }
 
+function gameBoxPlayerResize(i){
+    let gameDiv = document.createElement('div')
+    gameDiv.setAttribute('id',`${i}`)
+    gameDiv.classList.add('inner-box')
+    gameDiv.style.width = `${gridNum/10 *50}px`;
+    gameDiv.style.height = `${gridNum/10 *50}px`;
+    playerAllDivs.style.gridTemplateColumns =`repeat(${promptValue},1fr)`;
+    playerAllDivs.style.gridTemplateRows =`repeat(${promptValue},1fr)`;
+    playerAllDivs.append(gameDiv)
+}
 
 
 /*--------------------------------------------------------------GET BORDER VALUES---------------------------------------------*/
@@ -65,10 +79,17 @@ getBoarderNums()
 
 
 
-// OBJECT GAME BOARD (LOL NEVER AGAIN........ MABY)
+// OBJECT GAME BOARD FOR CPU AND ME TO CHOOSE  (LOL NEVER AGAIN........ MABY )
 const cpuBoardData ={
-
 }
+
+// OBJECT GAME BOARD FOR ME TO CHOOSE AND CPU TO GUESS
+
+const playerBoardData ={
+}
+
+
+
 
 //GAME BEGINING BEGINING STATE
 let gameStart = false
@@ -119,32 +140,43 @@ init()
 //BOARD INIT &&  PUSH ALL EMPTY AND BORDER VALUES INTO GAME 
 function init(){
     for(let i =1;i <= numGrid;i++){
-       gameBoxResize(i)
+       gameBoxCpuResize(i)
+       gameBoxPlayerResize(i)
 
        cpuBoardData[`${i}`] = 'empty'
+       playerBoardData[`${i}`] = 'empty'
+
        if(i%promptValue === 0){
            cpuBoardData[`${i}`] ='Right Edge'
+           playerBoardData[`${i}`] ='Right Edge'
        }
        if(i%promptValue -1 === 0){
         cpuBoardData[`${i}`] ='Left edge'
+        playerBoardData[`${i}`] ='Left edge'
        }
        if(i > 0 && i <= promptValue){
         cpuBoardData[`${i}`] ='Top edge'
+        playerBoardData[`${i}`] ='Top edge'
        }
        if(i> (promptValue* promptValue - promptValue) && i <promptValue* promptValue){
            cpuBoardData[`${i}`] ='Bottom edge'
+           playerBoardData[`${i}`] ='Bottom edge'
        }
        if(i === 1){
         cpuBoardData[`${i}`] ='topLeftCorner'
+        playerBoardData[`${i}`] ='topLeftCorner'
        }
        if(i === promptValue){
         cpuBoardData[`${i}`] ='topRightCorner'
+        playerBoardData[`${i}`] ='topRightCorner'
        }
        if(i === promptValue * promptValue - (promptValue -1)){
         cpuBoardData[`${i}`] = 'bottomLeftCorner'
+        playerBoardData[`${i}`] = 'bottomLeftCorner'
        }
        if(i === promptValue*promptValue){
         cpuBoardData[`${i}`] ='bottomRightCorner'
+        playerBoardData[`${i}`] ='bottomRightCorner'
        }
     }
 
