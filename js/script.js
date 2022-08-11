@@ -22,7 +22,15 @@ const cpuShipFiveDiv = document.getElementById('cpuS5')
 playerAllDivs.addEventListener("click",clickGameHandler)
 
 // EVENT HANDLERS 
-cpuAllDivs.addEventListener("click",clickCpuBoardHandler)
+cpuAllDivs.addEventListener("click",turnBasedPlay)
+
+
+//GAME BEGINING BEGINING STATE
+let gameStart = false
+
+//PLAYERS TURN BOOLEAN
+let playerTurn = true
+
 
 
 //GAMEBOARD SIZE CHANGE
@@ -102,9 +110,6 @@ const playerBoardData ={
 
 
 
-
-//GAME BEGINING BEGINING STATE
-let gameStart = false
 
 
 
@@ -264,6 +269,169 @@ if(ship.name === 'shipOne'){
 }
 
 
+/*---------------------------------------------------------------INITIALIZING END --------------------------------------------*/
+
+
+
+
+
+
+
+
+
+
+
+
+/////////--------------------------------------------TURN BASED START ---------------------------------------////////
+
+
+
+
+function turnBasedPlay(e){
+
+    while (playerTurn){
+        clickCpuBoardHandler(e)
+        playerTurn = false
+    }
+        cpuTurnFunc()
+    playerTurn = true
+}
+
+
+//AI GLOBAL HOLD STATES
+let firstHit =''
+let lastHit =''
+let lastDirection = 0
+
+let moveFoward =1
+let moveBackWard =1
+let moveTop = 1
+let moveBottom = 1
+
+let verticle = false
+
+function cpuTurnFunc(){
+let cpuAvailableSpots = Object.entries(playerBoardData).filter(val => val[1] !=='hit' && val[1] !=='miss')
+let randomNum = Math.floor(Math.random()*cpuAvailableSpots.length)
+let availRandomNum = cpuAvailableSpots[randomNum][0]
+
+
+let hit= true
+if(firstHit !== ''){
+    let value = Number(firstHit.split('p')[1])
+    
+    if(lastDirection === 1){
+        if(playerBoardData[`p${value +moveFoward}`].slice(0,4) ==='ship'){
+            document.getElementById(`p${value +moveFoward}`).style.backgroundColor ='orange'
+            playerBoardData[`p${value +moveFoward}`] ='hit'
+            lastHit = `p${value +moveFoward}`
+            moveFoward++
+            console.log('hit')
+        }else{
+            document.getElementById(`p${value +moveFoward}`).style.backgroundColor ='red'
+            lastDirection = 2
+            playerBoardData[`p${value +moveFoward}`] ='miss'
+            return 
+        }
+    }
+    if(lastDirection ===2){
+        console.log('its the second direction turn')
+        if(moveFoward >1){
+            if(playerBoardData[`p${value -moveBackWard}`].slice(0,4) ==='ship'){
+                document.getElementById(`p${value -moveBackWard}`).style.backgroundColor ='orange'
+                playerBoardData[`p${value - moveBackWard}`] ='hit'
+                lastHit = `p${value - moveBackWard}`
+                moveBackWard++
+                console.log('hit')
+            }else{
+                document.getElementById(`p${value - moveBackWard}`).style.backgroundColor ='red'
+                lastDirection = 3
+                playerBoardData[`p${value - moveBackWard}`] ='miss'
+                moveBackWard =0
+                moveFoward =0
+            }
+        }else{
+            document.getElementById(`p${value - moveTop * promptValue}`).style.backgroundColor ='orange'
+            playerBoardData[`p${value - moveTop * promptValue}`] ='hit'
+            lastHit = `p${value - moveTop * promptValue}`
+            moveTop++
+            console.log('hit')
+            lastDirection = 3
+        }
+        // if(playerBoardData[`p${value -1}`].slice(0,4) ==='ship'){
+        //     document.getElementById(`p${value +1}`).style.backgroundColor ='orange'
+        //     playerBoardData[`p${value -1}`] ='hit'
+        //     lastHit = `p${value -1}`
+        //     console.log('hit')
+        // }else{
+        //     document.getElementById(`p${value -1}`).style.backgroundColor ='red'
+        //     lastDirection = 3
+        //     playerBoardData[`p${value -1}`] ='miss'
+        // }
+    }
+    // }if(lastDirection ===3){
+    //     if(playerBoardData[availRandomNum].slice(0,4) ==='ship'){
+    //         document.getElementById(lastHit).style.backgroundColor ='orange'
+    //         playerBoardData[lastHit] ='hit'
+    //         lastHit = lastHit
+    //         console.log('hit')
+    //     }else{
+    //         document.getElementById(lastHit).style.backgroundColor ='red'
+    //         lastDirection = 4
+    //         playerBoardData[lastHit] ='miss'
+    //     }
+    // }
+    // if(lastDirection === 4 ){
+    //     if(playerBoardData[availRandomNum].slice(0,4) ==='ship'){
+    //         document.getElementById(lastHit).style.backgroundColor ='orange'
+    //         playerBoardData[lastHit] ='hit'
+    //         lastHit = lastHit
+    //         console.log('hit')
+    //     }else{
+    //         document.getElementById(lastHit).style.backgroundColor ='red'
+    //         lastDirection = 2
+    //         playerBoardData[lastHit] ='miss'
+    //     }
+    // }
+
+}else{
+    if(playerBoardData[availRandomNum].slice(0,4) ==='ship'){
+        document.getElementById(availRandomNum).style.backgroundColor ='orange'
+        playerBoardData[availRandomNum] ='hit'
+        firstHit = availRandomNum
+        lastDirection =1
+        console.log('hit')
+    }else{
+        document.getElementById(availRandomNum).style.backgroundColor ='red'
+        playerBoardData[availRandomNum] ='miss'
+    }
+
+}
+
+
+
+ 
+
+
+
+
+
+}
+
+
+
+
+/////////--------------------------------------------TURN BASED END ---------------------------------------////////
+
+
+
+
+
+
+
+
+
+
 
 /////////--------------------------------------------CLICK HANDLER FOR BOARDS START ---------------------------------------////////
 
@@ -310,12 +478,12 @@ function clickGameHandler(e){
 
 
 
-// CLICK HANDLER FOR CPU SHIP AND USER GUESSING GAME
+/////////-------------------------------------------- FOR CPU SHIP AND USER GUESSING GAME START ---------------------------------------////////
 function clickCpuBoardHandler(e){
 
     let myChoice = e.target.id
-    if(e.target.id === 'player-board') return ;
-
+    if(e.target.id === 'cpu-board') return ;
+  
         if(cpuBoardData[myChoice] ==='cpu-board' || cpuBoardData[myChoice]=== 'miss' || cpuBoardData[myChoice] === 'hit') return;
 
      
@@ -398,7 +566,18 @@ function clickCpuBoardHandler(e){
 
 
 
-/////////--------------------------------------------CLICK HANDLER FOR BOARDS END ---------------------------------------////////
+
+/////////-------------------------------------------- FOR CPU SHIP AND USER GUESSING GAME END ---------------------------------------////////
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -415,7 +594,7 @@ function clickCpuBoardHandler(e){
 
 let cpuChosenShipsArray =[]
 
-
+// ALL FIVE SHIPS PLACEMENT START
 function aiShipPlacement(){
     firstShipFunction(cpuShipOne,'grey')
     secondShipFunction(cpuShipTwo,'white')
