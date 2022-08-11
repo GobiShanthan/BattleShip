@@ -275,8 +275,8 @@ function clickGameHandler(e){
     if(e.target.id === 'player-board') return ;
 
     if(playerBoardData[e.target.id] === 'miss' && playerBoardData[e.target.id] === 'hit' && playerBoardData[e.target.id].slice(0,4)==='ship' ) return;
-    console.log(playerBoardData[e.target.id])
-    // let randomNum = Math.floor(Math.random()* Object.keys(playerBoardData).length)
+
+
 
     if(!gameStart){
         if(shipOne.remaining > 0){
@@ -296,7 +296,7 @@ function clickGameHandler(e){
 
         }
         else if(shipFive.remaining > 0){
-            shipPlacement(e,shipFive,'black')
+            shipPlacement(e,shipFive,'aqua')
         }
         else{
           console.log('You cant click on your boards anymore')
@@ -314,22 +314,22 @@ function clickGameHandler(e){
 function clickCpuBoardHandler(e){
 
     let myChoice = e.target.id
+    if(e.target.id === 'player-board') return ;
 
         if(cpuBoardData[myChoice] ==='cpu-board' || cpuBoardData[myChoice]=== 'miss' || cpuBoardData[myChoice] === 'hit') return;
 
-        console.log(e.target.id)
      
         if(cpuBoardData[myChoice] !=='hit' && cpuBoardData[myChoice].slice(0,4) ==='ship'){
             
             
             document.getElementById(e.target.id).style.backgroundColor ='orange'
             if(cpuBoardData[myChoice] ==='shipOne'){
-                if(shipOne.alive){
-                    shipOne.hit()
+                if(cpuShipOne.alive){
+                    cpuShipOne.hit()
                     cpuBoardData[myChoice] = 'hit'
-                    if(shipOne.remaining === 0){
+                    if(cpuShipOne.remaining === 0){
                       cpuShipOneDiv.innerText ='SHIP ONE IS DEAD'
-                      shipOne.isDead()
+                      cpuShipOne.isDead()
                     }
                 }else{
                     return
@@ -337,36 +337,36 @@ function clickCpuBoardHandler(e){
 
             }
             if(cpuBoardData[myChoice] ==='shipTwo'){
-                if(shipTwo.alive){
-                    shipTwo.hit()
+                if(cpuShipTwo.alive){
+                    cpuShipTwo.hit()
                     cpuBoardData[myChoice] = 'hit'
-                    if(shipTwo.remaining === 0){
+                    if(cpuShipTwo.remaining === 0){
                       cpuShipTwoDiv.innerText ='SHIP Two IS DEAD'
-                      shipTwo.isDead()
+                      cpuShipTwo.isDead()
                     }
                 }else{
                     return
                 }
             }
             if(cpuBoardData[myChoice] ==='shipThree'){
-                if(shipThree.alive){
-                    shipThree.hit()
+                if(cpuShipThree.alive){
+                    cpuShipThree.hit()
                     cpuBoardData[myChoice] = 'hit'
-                    if(shipThree.remaining === 0){
+                    if(cpuShipThree.remaining === 0){
                       cpuShipThreeDiv.innerText ='SHIP Three IS DEAD'
-                      shipThree.isDead()
+                      cpuShipThree.isDead()
                     }
                 }else{
                     return
                 }
             }
             if(cpuBoardData[myChoice] ==='shipFour'){
-                if(shipFour.alive){
-                    shipFour.hit()
+                if(cpuShipFour.alive){
+                    cpuShipFour.hit()
                     cpuBoardData[myChoice] = 'hit'
-                    if(shipFour.remaining === 0){
+                    if(cpuShipFour.remaining === 0){
                       cpuShipFourDiv.innerText ='SHIP Four IS DEAD'
-                      shipFour.isDead()
+                      cpuShipFour.isDead()
                     }
                 }else{
                     return
@@ -374,11 +374,11 @@ function clickCpuBoardHandler(e){
             }   
             if(cpuBoardData[myChoice] ==='shipFive'){
                 if(shipFive.alive){
-                    shipFive.hit()
+                    cpuShipFive.hit()
                     cpuBoardData[myChoice] = 'hit'
-                    if(shipFive.remaining === 0){
+                    if(cpuShipFive.remaining === 0){
                       cpuShipFiveDiv.innerText ='SHIP Five IS DEAD'
-                      shipFive.isDead()
+                      cpuShipFive.isDead()
                     }
                 }else{
                     return
@@ -394,9 +394,6 @@ function clickCpuBoardHandler(e){
         }
 
 }
-
-
-
 
 
 
@@ -421,10 +418,10 @@ let cpuChosenShipsArray =[]
 
 function aiShipPlacement(){
     firstShipFunction(cpuShipOne,'grey')
-    secondShipFunction(cpuShipTwo,'red')
+    secondShipFunction(cpuShipTwo,'white')
     thirdShipFunction(cpuShipThree,'purple')
     fourthShipFunction(cpuShipFour,'yellow')
-    fifthShipFunction(cpuShipFive,'cyan')
+    fifthShipFunction(cpuShipFive,'aqua')
 }
 
 aiShipPlacement()
