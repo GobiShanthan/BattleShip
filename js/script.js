@@ -140,8 +140,8 @@ function init(){
        if(i === promptValue){
         cpuBoardData[`${i}`] ='topRightCorner'
        }
-       if(i === promptValue*promptValue -promptValue){
-        cpuBoardData[`${i}`] ='bottomLeftCorner'
+       if(i === promptValue * promptValue - (promptValue -1)){
+        cpuBoardData[`${i}`] = 'bottomLeftCorner'
        }
        if(i === promptValue*promptValue){
         cpuBoardData[`${i}`] ='bottomRightCorner'
@@ -279,7 +279,7 @@ let allCpuEntries2 =  Object.entries(cpuBoardData)
 let availableValues2 = allCpuEntries2.filter(val=>val[1].slice(0,4) !== 'ship')
 let newFirstNumb2 = Math.floor(Math.random()* availableValues2.length)
 let thirdShipFirstChoice = availableValues2[newFirstNumb2][0]
-console.log(availableValues2,'third ship-----------------------------')
+
 
 ////////////////////////////////////////////////////////////////
 
@@ -323,10 +323,10 @@ aiShipPlacement()
 
 
 
-// //////////////////////////////////////////////////////////////////////////FIRST SHIP START ////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////FIRST SHIP START ////////////////////////////////////////////////////////////////////////////////////
 function firstShipFunction(ship,color){
 
-    const firstChoice = Math.floor(Math.random()* Object.keys(cpuBoardData).length)
+    const firstChoice = Math.floor(Math.random()* Object.keys(cpuBoardData).length)+1
     //step 1 - first random piece anywhere
     document.getElementById(firstChoice).style.backgroundColor = color
     cpuBoardData[firstChoice] = ship.name
@@ -335,12 +335,7 @@ function firstShipFunction(ship,color){
 
 //step 2 - Second piece
 
-
 let value = Object.keys(cpuBoardData).find(key => cpuBoardData[key] === 'shipOne');
-
-
-
-
 
 
 if(value % promptValue === 0 || (value -1) % promptValue === 0 ||value >0 && value < promptValue +1 || value >(promptValue* promptValue)- promptValue && value < promptValue * promptValue){
@@ -470,10 +465,7 @@ if(value % promptValue === 0 || (value -1) % promptValue === 0 ||value >0 && val
 
 
 }
-
 // //////////////////////////////////////////////////////////////////////////SECOND SHIP END////////////////////////////////////////////////////////////////////////////////////
-
-
 
 
 
@@ -483,34 +475,15 @@ if(value % promptValue === 0 || (value -1) % promptValue === 0 ||value >0 && val
 
 // //////////////////////////////////////////////////////////////////////////THIRD SHIP START////////////////////////////////////////////////////////////////////////////////////
 function thirdShipFunction(ship,color){
-
-
     let allCpuEntries =  Object.entries(cpuBoardData)
     let availableValues = allCpuEntries.filter(val=>val[1].slice(0,4) !== 'ship')
     let newFirstNumb = Math.floor(Math.random()* availableValues.length)
     let firstChoice = availableValues[newFirstNumb][0]
-    console.log(availableValues2,'third ship-----------------------------')
-
-
-
-
 
     const nextChoice = Math.floor(Math.random()*4)
 
-
-// //step 1 - first random piece anywhere
-// document.getElementById(firstChoice).style.backgroundColor = color
-// cpuBoardData[firstChoice] = ship.name
-// cpuBoardDataDeleted[firstChoice] = ship.name
-// delete cpuBoardDataDeleted[firstChoice] 
-
 //-------------------------------------------------------------------------//
-
 let value = firstChoice
-// console.log('right side',value % promptValue === 0)
-// console.log('left side',(value -1) % promptValue === 0 )
-// console.log('top side',value > 0 && value < promptValue +1)
-// console.log('bottom side',value > (promptValue * promptValue) - promptValue && value < (promptValue * promptValue) +1)
 
 // step 2 - Finish the ship
 
@@ -552,10 +525,7 @@ if(value % promptValue === 0 || (value -1) % promptValue === 0 ||value >0 && val
     nextChoiceAi(firstChoice,4,color,ship,nextChoice === 0?nextChoice +1 :nextChoice)
  }
 
-
-
 }
-
 ///////////////////////////////////////////////////////////////////////////THIRD SHIP END////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -690,6 +660,7 @@ if(value % promptValue === 0 || (value -1) % promptValue === 0 ||value >0 && val
 
 
 
+////////////////////////////////////////////////////////////////////////////AI SHIP PLACEMENT VALIDATION START////////////////////////////////////////////////////////////////////////////////////
 
 //FUNCTION TO CHECK IF THE NEXT SPACES FOR SHIP IS (EMPTY, INVALID, OVER AND UNDER BOARD LENGTH)
 function checkIfEmpty(nextChoice,num,firstChoice){
@@ -730,24 +701,29 @@ function checkIfEmpty(nextChoice,num,firstChoice){
     }
 // console.log(arr)
 let isUndefined = arr.includes(undefined)
-// console.log('isUndefined',isUndefined)
+
 let isEmpty = !isUndefined  ? arr.every((val) =>val.slice(0,4) !== 'ship' ):false
 
-// console.log('isEmpty',isEmpty)
-// console.log('values',arrValues)
-// console.log(arr.length,num)
 
 
+/*---------------------------------------------EDGE VALIDATION START--------------------------------------------------*/
+// CHECKS IF ARRAY HAS BOTH RIGHTSIDE AND LEFTSIDE THEN ON THE EDGE GOIGN TO NEXT LINE
 let isOnEdge = arr.includes('Right Edge') && arr.includes('Left edge')?true:false;
-console.log(isOnEdge,'<-------------------left to right--------------')
 
 
+
+//CHECKS TOP AND BOTTOM EDGE
+let isTopBottom = arr.includes('topLeftCorner') && arr.includes('Bottom edge')?true:false;
+
+// CHECKS IF ARRAY HAS BOTH RIGHTSIDE AND LEFTSIDE THEN ON THE EDGE GOIGN TO NEXT LINE
 let isOnTopRight = arr.includes('topRightCorner') && arr.includes('Left edge')?true:false;
-console.log(isOnEdge,'<-------------------left to right--------------')
+
 
 
 let isOnBottomLeft = arr.includes('bottomLeftCorner') && arr.includes('Right Edge')?true:false;
-console.log(isOnEdge,'<-------------------left to right--------------')
+
+
+/*---------------------------------------------EDGE VALIDATION END--------------------------------------------------*/
 
 
 
@@ -755,34 +731,61 @@ console.log(isOnEdge,'<-------------------left to right--------------')
 
 
 
+
+/*---------------------------------------------CORNER VALIDATION START--------------------------------------------------*/
+
+//CHECKS TOP AND BOTTOM LEFT SIDE
+let isTopBottomLeftCorner = arr.includes('topLeftCorner') && arr.includes('bottomLeftCorner')?true:false;
+
+
+//CHECKS TOP AND BOTTOM  RIGHT SIDE
+let isTopBottomRightCorner = arr.includes('topRightCorner') && arr.includes('bottomRightCorner')?true:false;
+
+//CHECKS TOP LEFT AND RIGHT
+let isTopRightLeftCorner = arr.includes('topLeftCorner') && arr.includes('topRightCorner')?true:false;
+
+
+//CHECKS BOTTOM LEFT AND RIGHT
+let isBottomRightLeftCorner = arr.includes('bottomLeftCorner') && arr.includes('bottomRightCorner')?true:false;
+
+/*---------------------------------------------CORNER VALIDATION END--------------------------------------------------*/
+
+
+
+
+
+
+
+/*---------------------------------------------CHECK EMPTY RETURN OBJECT START--------------------------------------------------*/
 let proceed ={
     run:false,
     values:[]
 } 
-let overAndUnderValue = arrValues.every(el=>el >0 && el <= promptValue *promptValue)
-console.log(overAndUnderValue,'just over and under')
+/*---------------------------------------------CHECK EMPTY RETURN OBJECT END--------------------------------------------------*/
 
-//pushing arrValues into proceed values
+
+
+
+//VALIDATION CHECK FOR BELOW BOARD LENGTH AND ABOVE LENGTH OF BOARD DIVS * WIDTH OF BOARD DIVS
+let overAndUnderValue = arrValues.every(el=>el >0 && el <= promptValue *promptValue)
+
+
+//PUSHING ARR VALUES INTO PROCEED.VALUES
 proceed.values.push( isEmpty && arr.length === num && !isUndefined && overAndUnderValue?arrValues:null)
 
+// CHECKS IF ARRAY VALUES HAS MORE THEN 0 LENGTH IN ARRAYS
 let valuesCheck = proceed.values.length > 0
-console.log('this is the values property',valuesCheck)
 
-proceed.run = isEmpty && arr.length === num && !isUndefined && overAndUnderValue && valuesCheck && !isOnEdge && !isOnTopRight && !isOnBottomLeft ?true:false
-console.log(proceed.run,'full proceed')
+
+// SETS RUN BOOL IN PROCEED OBJECT TO TRUE IF ALL CONDITIONS AND VALIDATIONS ARE MET
+proceed.run = isEmpty && arr.length === num && !isUndefined && overAndUnderValue && valuesCheck && !isOnEdge && !isOnTopRight && !isOnBottomLeft && !isTopBottomLeftCorner && !isTopBottomRightCorner && !isTopRightLeftCorner && !isBottomRightLeftCorner && !isTopBottom  ?true:false
+
+
+// RETURNS THE PROCEED VALUE
   return proceed
 
 }
-
-
-
-
-
-
-// function generateNewNumberCpuBoard(){
-//     return Math.floor(Math.random()*Object.keys(cpuBoardData).length)
-
-// }
+////////////////////////////////////////////////////////////////////////////AI SHIP PLACEMENT VALIDATION START////////////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -790,47 +793,33 @@ console.log(proceed.run,'full proceed')
 
 
 
+////////////////////////////////////////////////////////////////////////////RANDOM CHECKER AND IF PASSED VALIDATION PLOT SHIP  START////////////////////////////////////////////////////////////////////////////////////
 
 // //NEXT CHOICE TO DECIDE WHAT DIRECTION THE AI WILL GO WITH THE PEICES
 function nextChoiceAi (firstChoice,num,color,ship,nextChoice){
   
 let proceed = checkIfEmpty(nextChoice,num,firstChoice)
-
-
 let iterations =0
 
             while(!proceed.run){
-
-
-
                 if(iterations>6){
                     let newRandom = Math.floor(Math.random()*4)+1
-                    let = allCpuEntries =  Object.entries(cpuBoardData)
+                    let allCpuEntries =  Object.entries(cpuBoardData)
                     let availableValues = allCpuEntries.filter(val=>val[1].slice(0,4) !== 'ship')
                     let newFirstNumb = Math.floor(Math.random()* availableValues.length)
-
                     let newFirstChoice = availableValues[newFirstNumb]
-                   
                     proceed = checkIfEmpty(newRandom,num, Number(newFirstChoice[0]))
-                
-                    console.log('iterations',iterations)
                     iterations++
-                    console.log('iterations',iterations)
                 }else{
                     let newRandom = Math.floor(Math.random()*4)+1
                     proceed = checkIfEmpty(newRandom,num,firstChoice)
                     iterations++
-                    console.log('iterations',iterations)
                 }
-            
             }
 
 
- 
-
-    console.log(proceed.run,' i can proceed with the plotting of ships')
 if(proceed.run){
-    console.log('i am running the ship function')
+
 if(proceed.values.length >0){
 for(let i = 0 ; i < proceed.values[0].length;i++){
     document.getElementById(proceed.values[0][i]).style.backgroundColor =color
@@ -846,12 +835,9 @@ for(let i = 0 ; i < proceed.values[0].length;i++){
 }
 
 
-
-
-console.log(cpuBoardData)
 }
 
 
-
+////////////////////////////////////////////////////////////////////////////RANDOM CHECKER AND IF PASSED VALIDATION PLOT SHIP END////////////////////////////////////////////////////////////////////////////////////
 
 
