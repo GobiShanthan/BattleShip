@@ -10,14 +10,11 @@ const cpuShipThreeDiv = document.getElementById("cpuS3");
 const cpuShipFourDiv = document.getElementById("cpuS4");
 const cpuShipFiveDiv = document.getElementById("cpuS5");
 
-
 // EVENT HANDLER PLAYER BOARD
 playerAllDivs.addEventListener("click", clickGameHandler);
 
 // EVENT HANDLERS
 cpuAllDivs.addEventListener("click", turnBasedPlay);
-
-
 
 //GAME BEGINING BEGINING STATE
 let gameStart = false;
@@ -52,7 +49,6 @@ function gameBoxCpuResize(i) {
   gameDiv.style.height = `${(gridNum / 10) * 50}px`;
   cpuAllDivs.style.gridTemplateColumns = `repeat(${promptValue},1fr)`;
   cpuAllDivs.style.gridTemplateRows = `repeat(${promptValue},1fr)`;
-
   cpuAllDivs.appendChild(gameDiv);
 }
 
@@ -184,8 +180,6 @@ function init() {
 
 let cpuBoardDataDeleted = Object.assign({}, cpuBoardData);
 
-
-
 //DISPLAY SHIP FUNCTION
 function shipDisplay(e, ship, color, choiceId) {
   document.getElementById(`p${choiceId}`).style.backgroundColor = color;
@@ -283,10 +277,6 @@ function cpuTurnFunc() {
 
   if (cpuAvailableSpots.length === 0) return;
   if (playerBoardData[availRandomNum].slice(0, 4) === "ship") {
-    console.log(
-      playerBoardData[availRandomNum],
-      "<-------------fdfdsfdsfdsfdsfds-----------"
-    );
     document.getElementById(availRandomNum).style.backgroundColor = "orange";
 
     if (playerBoardData[availRandomNum] === "shipOne") {
@@ -343,7 +333,8 @@ function clickGameHandler(e) {
     } else if (shipFive.remaining > 0) {
       shipPlacement(e, shipFive, "aqua");
     } else {
-      document.getElementById('warning').innerText='Cant Click this board anymore! All peices are placed'
+      document.getElementById("warning").innerText =
+        "Cant Click this board anymore! All peices are placed";
     }
   }
 }
@@ -752,7 +743,7 @@ function checkIfEmpty(nextChoice, num, firstChoice) {
       arrValues.push(firstChoice - promptValue * i);
     }
   }
-  // console.log(arr)
+
   let isUndefined = arr.includes(undefined);
 
   let isEmpty = !isUndefined

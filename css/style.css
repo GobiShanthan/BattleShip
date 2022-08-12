@@ -2,7 +2,7 @@
   box-sizing: border-box;
   margin: 2px;
   padding: 0;
-  max-height: 130vh;
+  max-height: 100vh;
   border-radius: 20px;
 }
 
@@ -101,8 +101,9 @@ header {
   min-width: 100%;
   justify-content: center;
 }
+
 .board-container {
- padding-top: 75px;
+  padding-top: 75px;
 }
 .board {
   margin: 50px;
@@ -140,8 +141,8 @@ header {
   transform: scale(0.5);
 }
 #button-div {
-    position:fixed;
-    right:0;
+  position: fixed;
+  right: 0;
 }
 #reset-game {
   background-color: red;
