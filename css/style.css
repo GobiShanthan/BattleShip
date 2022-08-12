@@ -1,146 +1,185 @@
-*{
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+* {
+  box-sizing: border-box;
+  margin: 2px;
+  padding: 0;
+  max-height: 130vh;
+  border-radius: 20px;
 }
 
-body{
-    display:grid;
-    grid-template-rows: 1fr 20fr 1fr;
-    height:100vh;
+body {
+  display: grid;
+  grid-template-rows: 1fr 50fr 1fr;
+  height: 100vh;
+  max-height: 100vh;
+  background-color: lightgrey;
 }
 
+@media only screen and (max-width: 600px) {
+  body {
+    height: 100vh;
+    max-height: 100%;
+  }
+}
 
 /***********************************************************HEADER**********************************************************/
 
 /*HEADER*/
-header{
-    background-color:green;
-    display:flex;
-    justify-content: space-between;
+header {
+  background-color: green;
+  display: flex;
+  justify-content: space-between;
+}
+#logo-pic {
+  width: 150px;
+}
+#warning {
+  color: red;
+}
+#winner {
+  font-size: 50px;
+  color: white;
 }
 
-#board-size{
-    padding:10px;
-    font-size:20px;
+#board-size {
+  padding: 10px;
+  font-size: 20px;
 }
 
-#board-size-button{
-    padding:10px;
-    font-size:10px;
+#board-size-button {
+  padding: 10px;
+  font-size: 10px;
 }
+
 /***********************************************************HEADER**********************************************************/
-
-
-
-
-
-
 
 /***********************************************************MAIN**********************************************************/
 
 /*MAIN CONTAINER*/
-#main-div{
-    display:grid;
-    grid-template-columns: 1fr 3fr 1fr;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-
+#main-div {
+  display: grid;
+  grid-template-columns: 1fr 3fr 1fr;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
-
 
 /*LEFT SIDE*/
 
-#main-div #left{
-    background-color: cyan;
-    height: 100%;
+#main-div #left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
-
-
-
-
 
 /*MIDDLE*/
 
-#main-div #mid{
-    background-color: grey;
-    height: 100%;
-    display:grid;
-    grid-template-rows: 2fr 12fr 1fr;
+#main-div #mid {
+  background-color: lightgrey;
+  height: 120vh;
+  display: grid;
+  grid-template-rows: 2fr 12fr 1fr;
 }
 
-
-
-#title-container{
-    background-color:red;
+#title-container {
+  background-color: red;
 }
 
-#main-title{
-    padding-top:10px;
-    font-size:40px;
-    font-weight:700;
+#main-title {
+  padding-top: 10px;
+  font-size: 40px;
+  font-weight: 700;
 }
-#author{
-    font-size:20px;
-}
-
-
-#gameboard-container{
-    background-color:lightgrey;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    min-width: 500px;
+#author {
+  font-size: 20px;
 }
 
-.board{
-    margin:50px;
-    display: grid;
-    min-width: 500px;
-    min-height: 500px;
+#gameboard-container {
+  background-color: lightgrey;
+  display: flex;
+  flex-direction: row;
+  min-width: 100%;
+  justify-content: center;
+}
+.board-container {
+ padding-top: 75px;
+}
+.board {
+  margin: 50px;
+  display: grid;
+  min-width: 500px;
+  min-height: 500px;
+}
+.board-title {
+  font-size: 40px;
+  margin-top: 20px;
 }
 
-.inner-box{
-border:solid 1px black;
-width:50px;
-height:50px;
+.ship-pic-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-.inner-box:hover{
-    width: 51px;
-    height:51px;
-    border:solid 1px black;
-    background-color:green;
+.inner-box {
+  border: solid 1px black;
+  width: 50px;
+  height: 50px;
+  transition: all 0.2s ease-in-out;
 }
 
-
-#timer-container{
-    background-color:yellow;
+.inner-box:hover {
+  width: 51px;
+  height: 51px;
+  border: solid 1px black;
+  background-color: green;
+  transform: scale(1.4);
 }
-
-
-
-
-
+#inner-box:active {
+  transform: scale(0.5);
+}
+#button-div {
+    position:fixed;
+    right:0;
+}
+#reset-game {
+  background-color: red;
+  margin-bottom: 12vh;
+  width: 150px;
+  height: 150px;
+  padding: 25px;
+  border-radius: 50%;
+  font-size: 30px;
+  font-weight: bolder;
+  color: white;
+  transition: all 0.2s ease-in-out;
+}
+#reset-game:hover {
+  transform: scale(1.1);
+}
+#reset-game:active {
+  transform: scale(0.9);
+}
 
 /*RIGHTSIDE*/
 
-#main-div #right{
-    background-color: lightsalmon;
-    height: 100%;
+#main-div #right {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 /***********************************************************MAIN**********************************************************/
 
-
-
-
-
-
-
 /***********************************************************FOOTER**********************************************************/
-footer{
-    background-color:purple;
-    text-align: center;
+footer {
+  position: fixed;
+  font-size: 40px;
+  text-align: center;
+  bottom: 0px;
+  left: 0;
+  right: 0;
+  text-align: center;
 }
 /***********************************************************FOOTER**********************************************************/
