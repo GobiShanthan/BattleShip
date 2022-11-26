@@ -1,7 +1,65 @@
 
 ////////////////////////////////////////////////////////////////////////////RANDOM CHECKER AND IF PASSED VALIDATION PLOT SHIP END////////////////////////////////////////////////////////////////////////////////////
+//PLAYERS TURN BOOLEAN
+let playerTurn = true;
+// OBJECT GAME BOARD FOR CPU AND ME TO CHOOSE  (LOL NEVER AGAIN........ MABY )
+const cpuBoardData = {};
 
-init()
+// OBJECT GAME BOARD FOR ME TO CHOOSE AND CPU TO GUESS
+
+const playerBoardData = {};
+
+//PLAYER IS DEAD STATE
+let playerDeadShips = [];
+
+//PLAYER IS DEAD STATE
+let computerDeadShips = [];
+
+
+const cpuShipOneDiv = document.getElementById("cpuS1");
+const cpuShipTwoDiv = document.getElementById("cpuS2");
+const cpuShipThreeDiv = document.getElementById("cpuS3");
+const cpuShipFourDiv = document.getElementById("cpuS4");
+const cpuShipFiveDiv = document.getElementById("cpuS5");
+
+/*---------------------------------------------------------------SHIP CLASS SETUP START --------------------------------------------*/
+//SHIP CLASS
+class Ship {
+  constructor(name, positions, spaces, remaining) {
+    this.alive = true;
+    this.name = name;
+    this.positions = positions;
+    this.spaces = spaces;
+    this.remaining = remaining;
+  }
+  hit() {
+    this.spaces--;
+    if (this.spaces === 0) {
+      this.isDead();
+    }
+  }
+
+  isDead() {
+    this.alive = false;
+  }
+}
+
+// CREATED SHIP PLAYER
+let shipOne = new Ship("shipOne", [], 2, 2);
+let shipTwo = new Ship("shipTwo", [], 3, 3);
+let shipThree = new Ship("shipThree", [], 4, 4);
+let shipFour = new Ship("shipFour", [], 5, 5);
+let shipFive = new Ship("shipFive", [], 6, 6);
+
+//CREATED SHIP AI (CPU)
+let cpuShipOne = new Ship("shipOne", [], 2, 2);
+let cpuShipTwo = new Ship("shipTwo", [], 3, 3);
+let cpuShipThree = new Ship("shipThree", [], 4, 4);
+let cpuShipFour = new Ship("shipFour", [], 5, 5);
+let cpuShipFive = new Ship("shipFive", [], 6, 6);
+
+/*---------------------------------------------------------------SHIP CLASS SETUP END --------------------------------------------*/
+
 //CPU AND PLAYER BOARD INIT &&  PUSH ALL EMPTY AND BORDER VALUES INTO GAME
 function init() {
 
@@ -11,11 +69,9 @@ const cpuAllDivs = document.getElementById("cpu-board");
 //GAME BOARD PLAYER CONTAINER
 const playerAllDivs = document.getElementById("player-board");
 
-const cpuShipOneDiv = document.getElementById("cpuS1");
-const cpuShipTwoDiv = document.getElementById("cpuS2");
-const cpuShipThreeDiv = document.getElementById("cpuS3");
-const cpuShipFourDiv = document.getElementById("cpuS4");
-const cpuShipFiveDiv = document.getElementById("cpuS5");
+
+//TESTING INPUT
+const testing = document.getElementById("testing")
 
 
 // EVENT HANDLERS
@@ -24,26 +80,16 @@ cpuAllDivs.addEventListener("click", turnBasedPlay);
 //GAME BEGINING BEGINING STATE
 let gameStart = false;
 
-//PLAYERS TURN BOOLEAN
-let playerTurn = true;
 
-//PLAYER IS DEAD STATE
-let playerDeadShips = [];
 
-//PLAYER IS DEAD STATE
-let computerDeadShips = [];
+
 
 //GAMEBOARD SIZE CHANGE
 let promptValue = 10;
 let gridNum = promptValue;
 let numGrid = gridNum * gridNum;
 
-// OBJECT GAME BOARD FOR CPU AND ME TO CHOOSE  (LOL NEVER AGAIN........ MABY )
-const cpuBoardData = {};
 
-// OBJECT GAME BOARD FOR ME TO CHOOSE AND CPU TO GUESS
-
-const playerBoardData = {};
 
 // CPU GAME BOX
 function gameBoxCpuResize(i) {
@@ -94,43 +140,7 @@ getBoarderNums();
 
 /*---------------------------------------------------------------GET BOARDER VALUES--------------------------------------------*/
 
-/*---------------------------------------------------------------SHIP CLASS SETUP START --------------------------------------------*/
-//SHIP CLASS
-class Ship {
-  constructor(name, positions, spaces, remaining) {
-    this.alive = true;
-    this.name = name;
-    this.positions = positions;
-    this.spaces = spaces;
-    this.remaining = remaining;
-  }
-  hit() {
-    this.spaces--;
-    if (this.spaces === 0) {
-      this.isDead();
-    }
-  }
 
-  isDead() {
-    this.alive = false;
-  }
-}
-
-// CREATED SHIP PLAYER
-let shipOne = new Ship("shipOne", [], 2, 2);
-let shipTwo = new Ship("shipTwo", [], 3, 3);
-let shipThree = new Ship("shipThree", [], 4, 4);
-let shipFour = new Ship("shipFour", [], 5, 5);
-let shipFive = new Ship("shipFive", [], 6, 6);
-
-//CREATED SHIP AI (CPU)
-let cpuShipOne = new Ship("shipOne", [], 2, 2);
-let cpuShipTwo = new Ship("shipTwo", [], 3, 3);
-let cpuShipThree = new Ship("shipThree", [], 4, 4);
-let cpuShipFour = new Ship("shipFour", [], 5, 5);
-let cpuShipFive = new Ship("shipFive", [], 6, 6);
-
-/*---------------------------------------------------------------SHIP CLASS SETUP END --------------------------------------------*/
 
 /*---------------------------------------------------------------INITIALIZING --------------------------------------------*/
 
@@ -141,22 +151,7 @@ let cpuBoardDataDeleted = Object.assign({}, cpuBoardData);
 
   cpuAllDivs.innerHTML=''
   playerAllDivs.innerHTML=''
-  function turnBasedPlay(e) {
-
-      while (playerTurn) {
-        clickCpuBoardHandler(e);
-        playerTurn = false;
-      }
   
-      cpuTurnFunc();
-      playerTurn = true;
-    
-      if (playerDeadShips.length === 20) {
-        document.getElementById("winner").innerText = "CPU WINS";
-      } else if (computerDeadShips.length === 20) {
-        document.getElementById("winner").innerText = "PLAYER WINS";
-      } 
-  }
   
   //AI GLOBAL HOLD STATES
   let firstHit = "";
@@ -168,43 +163,7 @@ let cpuBoardDataDeleted = Object.assign({}, cpuBoardData);
   let moveTop = 1;
   let moveBottom = 1;
   
-  function cpuTurnFunc() {
-    let cpuAvailableSpots = Object.entries(playerBoardData).filter(
-      (val) => val[1] !== "hit" && val[1] !== "miss"
-    );
-    let randomNum = Math.floor(Math.random() * cpuAvailableSpots.length);
-    let availRandomNum = cpuAvailableSpots[randomNum][0];
-  
-    if (cpuAvailableSpots.length === 0) return;
-    if (playerBoardData[availRandomNum].slice(0, 4) === "ship") {
-      document.getElementById(availRandomNum).style.backgroundColor = "orange";
-  
-      if (playerBoardData[availRandomNum] === "shipOne") {
-        shipOne.hit();
-        playerBoardData[availRandomNum] = "hit";
-        !shipOne.isAlive && playerDeadShips.push(shipOne.name);
-      } else if (playerBoardData[availRandomNum] === "shipTwo") {
-        shipTwo.hit();
-        playerBoardData[availRandomNum] = "hit";
-        !shipTwo.isAlive && playerDeadShips.push(shipTwo.name);
-      } else if (playerBoardData[availRandomNum] === "shipThree") {
-        shipThree.hit();
-        playerBoardData[availRandomNum] = "hit";
-        !shipThree.isAlive && playerDeadShips.push(shipThree.name);
-      } else if (playerBoardData[availRandomNum] === "shipFour") {
-        shipFour.hit();
-        playerBoardData[availRandomNum] = "hit";
-        !shipFour.isAlive && playerDeadShips.push(shipFour.name);
-      } else if (playerBoardData[availRandomNum] === "shipFive") {
-        shipFive.hit();
-        playerBoardData[availRandomNum] = "hit";
-        !shipFive.isAlive && playerDeadShips.push(shipFive.name);
-      }
-    } else {
-      document.getElementById(availRandomNum).style.backgroundColor = "red";
-      playerBoardData[availRandomNum] = "miss";
-    }
-  }
+
   
   /////////--------------------------------------------TURN BASED END ---------------------------------------////////
   
@@ -212,59 +171,17 @@ let cpuBoardDataDeleted = Object.assign({}, cpuBoardData);
   
 
   
-  /////////-------------------------------------------- FOR CPU SHIP AND USER GUESSING GAME START ---------------------------------------////////
-  function clickCpuBoardHandler(e) {
-    let myChoice = e.target.id;
-    if (e.target.id === "cpu-board") return;
-  
-    if (
-      cpuBoardData[myChoice] === "cpu-board" ||
-      cpuBoardData[myChoice] === "miss" ||
-      cpuBoardData[myChoice] === "hit"
-    )
-      return;
-  
-    if (
-      cpuBoardData[myChoice] !== "hit" &&
-      cpuBoardData[myChoice].slice(0, 4) === "ship"
-    ) {
-      document.getElementById(e.target.id).style.backgroundColor = "orange";
-      if (cpuBoardData[myChoice] === "shipOne") {
-        cpuShipOne.hit();
-        cpuBoardData[myChoice] = "hit";
-        !cpuShipOne.isAlive && computerDeadShips.push(cpuShipOne.name);
-      }
-      if (cpuBoardData[myChoice] === "shipTwo") {
-        cpuShipTwo.hit();
-        cpuBoardData[myChoice] = "hit";
-        !cpuShipTwo.isAlive && computerDeadShips.push(cpuShipTwo.name);
-      }
-      if (cpuBoardData[myChoice] === "shipThree") {
-        cpuShipThree.hit();
-        cpuBoardData[myChoice] = "hit";
-        !cpuShipThree.isAlive && computerDeadShips.push(cpuShipThree.name);
-      }
-      if (cpuBoardData[myChoice] === "shipFour") {
-        cpuShipFour.hit();
-        cpuBoardData[myChoice] = "hit";
-        !cpuShipFour.isAlive && computerDeadShips.push(cpuShipFour.name);
-      }
-      if (cpuBoardData[myChoice] === "shipFive") {
-        cpuShipFive.hit();
-        cpuBoardData[myChoice] = "hit";
-        !cpuShipFive.isAlive && computerDeadShips.push(cpuShipFive.name);
-      }
-    } else {
-      cpuBoardData[myChoice] = "miss";
-      document.getElementById(e.target.id).style.backgroundColor = "red";
-    }
-  }
+
   /////////-------------------------------------------- FOR CPU SHIP AND USER GUESSING GAME END ---------------------------------------////////
   
   /////////--------------------------------------------SHIP AI ---------------------------------------////////
   
   let cpuChosenShipsArray = [];
   
+  let isChecked = false
+  testing.addEventListener('change',function(e){
+    console.log(e.target.checked)
+  })
   // ALL FIVE SHIPS PLACEMENT START
   function aiShipPlacement() {
     firstShipFunction(cpuShipOne, "grey");
@@ -274,7 +191,6 @@ let cpuBoardDataDeleted = Object.assign({}, cpuBoardData);
     fifthShipFunction(cpuShipFive, "aqua");
   }
   
-  // aiShipPlacement();
   
   ////////////////////////////////////////////////////////////////////////////FIRST SHIP START ////////////////////////////////////////////////////////////////////////////////////
   function firstShipFunction(ship, color) {
@@ -755,7 +671,7 @@ let cpuBoardDataDeleted = Object.assign({}, cpuBoardData);
   }
   
 
-
+  // DETERMINE THE BOARDERS OF THE BOX
   for (let i = 1; i <= numGrid; i++) {
 
     gameBoxCpuResize(i);
@@ -915,41 +831,118 @@ function clickGameHandler(e) {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
   aiShipPlacement()
 }
 
+function cpuTurnFunc() {
+  let cpuAvailableSpots = Object.entries(playerBoardData).filter(
+    (val) => val[1] !== "hit" && val[1] !== "miss"
+  );
+  let randomNum = Math.floor(Math.random() * cpuAvailableSpots.length);
+  let availRandomNum = cpuAvailableSpots[randomNum][0];
 
+  if (cpuAvailableSpots.length === 0) return;
+  if (playerBoardData[availRandomNum].slice(0, 4) === "ship") {
+    document.getElementById(availRandomNum).style.backgroundColor = "orange";
 
+    if (playerBoardData[availRandomNum] === "shipOne") {
+      shipOne.hit();
+      playerBoardData[availRandomNum] = "hit";
+      !shipOne.isAlive && playerDeadShips.push(shipOne.name);
+    } else if (playerBoardData[availRandomNum] === "shipTwo") {
+      shipTwo.hit();
+      playerBoardData[availRandomNum] = "hit";
+      !shipTwo.isAlive && playerDeadShips.push(shipTwo.name);
+    } else if (playerBoardData[availRandomNum] === "shipThree") {
+      shipThree.hit();
+      playerBoardData[availRandomNum] = "hit";
+      !shipThree.isAlive && playerDeadShips.push(shipThree.name);
+    } else if (playerBoardData[availRandomNum] === "shipFour") {
+      shipFour.hit();
+      playerBoardData[availRandomNum] = "hit";
+      !shipFour.isAlive && playerDeadShips.push(shipFour.name);
+    } else if (playerBoardData[availRandomNum] === "shipFive") {
+      shipFive.hit();
+      playerBoardData[availRandomNum] = "hit";
+      !shipFive.isAlive && playerDeadShips.push(shipFive.name);
+    }
+  } else {
+    document.getElementById(availRandomNum).style.backgroundColor = "red";
+    playerBoardData[availRandomNum] = "miss";
+  }
+}
 
+  /////////-------------------------------------------- FOR CPU SHIP AND USER GUESSING GAME START ---------------------------------------////////
+  function clickCpuBoardHandler(e) {
+    let myChoice = e.target.id;
+    if (e.target.id === "cpu-board") return;
+  
+    if (
+      cpuBoardData[myChoice] === "cpu-board" ||
+      cpuBoardData[myChoice] === "miss" ||
+      cpuBoardData[myChoice] === "hit"
+    )
+      return;
+    
 
+    if (
+      cpuBoardData[myChoice] !== "hit" &&
+      cpuBoardData[myChoice].slice(0, 4) === "ship"
+    ) {
+      document.getElementById(e.target.id).style.backgroundColor = "orange";
+      if (cpuBoardData[myChoice] === "shipOne") {
+        cpuShipOne.hit();
+        cpuBoardData[myChoice] = "hit";
+        !cpuShipOne.isAlive && computerDeadShips.push(cpuShipOne.name);
+      }
+      if (cpuBoardData[myChoice] === "shipTwo") {
+        cpuShipTwo.hit();
+        cpuBoardData[myChoice] = "hit";
+        !cpuShipTwo.isAlive && computerDeadShips.push(cpuShipTwo.name);
+      }
+      if (cpuBoardData[myChoice] === "shipThree") {
+        cpuShipThree.hit();
+        cpuBoardData[myChoice] = "hit";
+        !cpuShipThree.isAlive && computerDeadShips.push(cpuShipThree.name);
+      }
+      if (cpuBoardData[myChoice] === "shipFour") {
+        cpuShipFour.hit();
+        cpuBoardData[myChoice] = "hit";
+        !cpuShipFour.isAlive && computerDeadShips.push(cpuShipFour.name);
+      }
+      if (cpuBoardData[myChoice] === "shipFive") {
+        cpuShipFive.hit();
+        cpuBoardData[myChoice] = "hit";
+        !cpuShipFive.isAlive && computerDeadShips.push(cpuShipFive.name);
+      }
+    } else {
+      cpuBoardData[myChoice] = "miss";
+      document.getElementById(e.target.id).style.backgroundColor = "red";
+    }
 
+  }
 
-
-
-
-
-
-
-
+function turnBasedPlay(e) {
+    while (playerTurn) {
+      clickCpuBoardHandler(e);
+      playerTurn = false;
+    }
+    if(!playerTurn){
+      cpuTurnFunc();
+      playerTurn = true;
+    }
+    if (playerDeadShips.length === 20) {
+      document.getElementById("winner").innerText = "CPU WINS";
+    } else if (computerDeadShips.length === 20) {
+      document.getElementById("winner").innerText = "PLAYER WINS";
+    } 
+}
 
 
 reset = document.getElementById('reset')
+reset.innerHTML='PLAY GAME'
 reset.addEventListener('click', function (e) {
   init();
+  reset.innerHTML='Reset'
 })
+
