@@ -35,7 +35,7 @@
 
 ##Updates Coming Soon
 
-1. Reset Button with Ai Reset
+1. Reset Button with Ai Reset (COMPLETED)
 2. Advanced AI Opponent
 3. Color Chooser
 4. Ship Graphics
