@@ -1,7 +1,4 @@
 
-////////////////////////////////////////////////////////////////////////////RANDOM CHECKER AND IF PASSED VALIDATION PLOT SHIP END////////////////////////////////////////////////////////////////////////////////////
-//PLAYERS TURN BOOLEAN
-let playerTurn = true;
 // OBJECT GAME BOARD FOR CPU AND ME TO CHOOSE  (LOL NEVER AGAIN........ MABY )
 const cpuBoardData = {};
 
@@ -14,6 +11,124 @@ let playerDeadShips = [];
 
 //PLAYER IS DEAD STATE
 let computerDeadShips = [];
+
+
+const cpuAllDivs = document.getElementById("cpu-board");
+
+function turnBasedPlay(e) {
+  while (playerTurn) {
+    clickCpuBoardHandler(e);
+    playerTurn = false;
+  }
+  if(!playerTurn){
+    cpuTurnFunc();
+    playerTurn = true;
+  }
+  if (playerDeadShips.length === 20) {
+    document.getElementById("winner").innerText = "CPU WINS";
+  } else if (computerDeadShips.length === 20) {
+    document.getElementById("winner").innerText = "PLAYER WINS";
+  } 
+}
+
+function cpuTurnFunc() {
+  let cpuAvailableSpots = Object.entries(playerBoardData).filter(
+    (val) => val[1] !== "hit" && val[1] !== "miss"
+  );
+  let randomNum = Math.floor(Math.random() * cpuAvailableSpots.length);
+  let availRandomNum = cpuAvailableSpots[randomNum][0];
+
+  if (cpuAvailableSpots.length === 0) return;
+  if (playerBoardData[availRandomNum].slice(0, 4) === "ship") {
+    document.getElementById(availRandomNum).style.backgroundColor = "orange";
+
+    if (playerBoardData[availRandomNum] === "shipOne") {
+      shipOne.hit();
+      playerBoardData[availRandomNum] = "hit";
+      !shipOne.isAlive && playerDeadShips.push(shipOne.name);
+    } else if (playerBoardData[availRandomNum] === "shipTwo") {
+      shipTwo.hit();
+      playerBoardData[availRandomNum] = "hit";
+      !shipTwo.isAlive && playerDeadShips.push(shipTwo.name);
+    } else if (playerBoardData[availRandomNum] === "shipThree") {
+      shipThree.hit();
+      playerBoardData[availRandomNum] = "hit";
+      !shipThree.isAlive && playerDeadShips.push(shipThree.name);
+    } else if (playerBoardData[availRandomNum] === "shipFour") {
+      shipFour.hit();
+      playerBoardData[availRandomNum] = "hit";
+      !shipFour.isAlive && playerDeadShips.push(shipFour.name);
+    } else if (playerBoardData[availRandomNum] === "shipFive") {
+      shipFive.hit();
+      playerBoardData[availRandomNum] = "hit";
+      !shipFive.isAlive && playerDeadShips.push(shipFive.name);
+    }
+  } else {
+    document.getElementById(availRandomNum).style.backgroundColor = "red";
+    playerBoardData[availRandomNum] = "miss";
+  }
+}
+
+  /////////-------------------------------------------- FOR CPU SHIP AND USER GUESSING GAME START ---------------------------------------////////
+  function clickCpuBoardHandler(e) {
+    let myChoice = e.target.id;
+    if (e.target.id === "cpu-board") return;
+  
+    if (
+      cpuBoardData[myChoice] === "cpu-board" ||
+      cpuBoardData[myChoice] === "miss" ||
+      cpuBoardData[myChoice] === "hit"
+    )
+      return;
+    
+
+    if (
+      cpuBoardData[myChoice] !== "hit" &&
+      cpuBoardData[myChoice].slice(0, 4) === "ship"
+    ) {
+      document.getElementById(e.target.id).style.backgroundColor = "orange";
+      if (cpuBoardData[myChoice] === "shipOne") {
+        cpuShipOne.hit();
+        cpuBoardData[myChoice] = "hit";
+        !cpuShipOne.isAlive && computerDeadShips.push(cpuShipOne.name);
+      }
+      if (cpuBoardData[myChoice] === "shipTwo") {
+        cpuShipTwo.hit();
+        cpuBoardData[myChoice] = "hit";
+        !cpuShipTwo.isAlive && computerDeadShips.push(cpuShipTwo.name);
+      }
+      if (cpuBoardData[myChoice] === "shipThree") {
+        cpuShipThree.hit();
+        cpuBoardData[myChoice] = "hit";
+        !cpuShipThree.isAlive && computerDeadShips.push(cpuShipThree.name);
+      }
+      if (cpuBoardData[myChoice] === "shipFour") {
+        cpuShipFour.hit();
+        cpuBoardData[myChoice] = "hit";
+        !cpuShipFour.isAlive && computerDeadShips.push(cpuShipFour.name);
+      }
+      if (cpuBoardData[myChoice] === "shipFive") {
+        cpuShipFive.hit();
+        cpuBoardData[myChoice] = "hit";
+        !cpuShipFive.isAlive && computerDeadShips.push(cpuShipFive.name);
+      }
+    } else {
+      cpuBoardData[myChoice] = "miss";
+      document.getElementById(e.target.id).style.backgroundColor = "red";
+    }
+
+  }
+
+
+  //PLAYERS TURN BOOLEAN
+let playerTurn = true;
+
+function init(){
+
+
+
+  ////////////////////////////////////////////////////////////////////////////RANDOM CHECKER AND IF PASSED VALIDATION PLOT SHIP END////////////////////////////////////////////////////////////////////////////////////
+
 
 
 const cpuShipOneDiv = document.getElementById("cpuS1");
@@ -61,7 +176,7 @@ let cpuShipFive = new Ship("shipFive", [], 6, 6);
 /*---------------------------------------------------------------SHIP CLASS SETUP END --------------------------------------------*/
 
 //CPU AND PLAYER BOARD INIT &&  PUSH ALL EMPTY AND BORDER VALUES INTO GAME
-function init() {
+
 
 //GAME BOARD CPU CONTAINER
 const cpuAllDivs = document.getElementById("cpu-board");
@@ -832,117 +947,16 @@ function clickGameHandler(e) {
 
 
   aiShipPlacement()
-}
 
-function cpuTurnFunc() {
-  let cpuAvailableSpots = Object.entries(playerBoardData).filter(
-    (val) => val[1] !== "hit" && val[1] !== "miss"
-  );
-  let randomNum = Math.floor(Math.random() * cpuAvailableSpots.length);
-  let availRandomNum = cpuAvailableSpots[randomNum][0];
 
-  if (cpuAvailableSpots.length === 0) return;
-  if (playerBoardData[availRandomNum].slice(0, 4) === "ship") {
-    document.getElementById(availRandomNum).style.backgroundColor = "orange";
 
-    if (playerBoardData[availRandomNum] === "shipOne") {
-      shipOne.hit();
-      playerBoardData[availRandomNum] = "hit";
-      !shipOne.isAlive && playerDeadShips.push(shipOne.name);
-    } else if (playerBoardData[availRandomNum] === "shipTwo") {
-      shipTwo.hit();
-      playerBoardData[availRandomNum] = "hit";
-      !shipTwo.isAlive && playerDeadShips.push(shipTwo.name);
-    } else if (playerBoardData[availRandomNum] === "shipThree") {
-      shipThree.hit();
-      playerBoardData[availRandomNum] = "hit";
-      !shipThree.isAlive && playerDeadShips.push(shipThree.name);
-    } else if (playerBoardData[availRandomNum] === "shipFour") {
-      shipFour.hit();
-      playerBoardData[availRandomNum] = "hit";
-      !shipFour.isAlive && playerDeadShips.push(shipFour.name);
-    } else if (playerBoardData[availRandomNum] === "shipFive") {
-      shipFive.hit();
-      playerBoardData[availRandomNum] = "hit";
-      !shipFive.isAlive && playerDeadShips.push(shipFive.name);
-    }
-  } else {
-    document.getElementById(availRandomNum).style.backgroundColor = "red";
-    playerBoardData[availRandomNum] = "miss";
-  }
-}
 
-  /////////-------------------------------------------- FOR CPU SHIP AND USER GUESSING GAME START ---------------------------------------////////
-  function clickCpuBoardHandler(e) {
-    let myChoice = e.target.id;
-    if (e.target.id === "cpu-board") return;
-  
-    if (
-      cpuBoardData[myChoice] === "cpu-board" ||
-      cpuBoardData[myChoice] === "miss" ||
-      cpuBoardData[myChoice] === "hit"
-    )
-      return;
-    
-
-    if (
-      cpuBoardData[myChoice] !== "hit" &&
-      cpuBoardData[myChoice].slice(0, 4) === "ship"
-    ) {
-      document.getElementById(e.target.id).style.backgroundColor = "orange";
-      if (cpuBoardData[myChoice] === "shipOne") {
-        cpuShipOne.hit();
-        cpuBoardData[myChoice] = "hit";
-        !cpuShipOne.isAlive && computerDeadShips.push(cpuShipOne.name);
-      }
-      if (cpuBoardData[myChoice] === "shipTwo") {
-        cpuShipTwo.hit();
-        cpuBoardData[myChoice] = "hit";
-        !cpuShipTwo.isAlive && computerDeadShips.push(cpuShipTwo.name);
-      }
-      if (cpuBoardData[myChoice] === "shipThree") {
-        cpuShipThree.hit();
-        cpuBoardData[myChoice] = "hit";
-        !cpuShipThree.isAlive && computerDeadShips.push(cpuShipThree.name);
-      }
-      if (cpuBoardData[myChoice] === "shipFour") {
-        cpuShipFour.hit();
-        cpuBoardData[myChoice] = "hit";
-        !cpuShipFour.isAlive && computerDeadShips.push(cpuShipFour.name);
-      }
-      if (cpuBoardData[myChoice] === "shipFive") {
-        cpuShipFive.hit();
-        cpuBoardData[myChoice] = "hit";
-        !cpuShipFive.isAlive && computerDeadShips.push(cpuShipFive.name);
-      }
-    } else {
-      cpuBoardData[myChoice] = "miss";
-      document.getElementById(e.target.id).style.backgroundColor = "red";
-    }
-
-  }
-
-function turnBasedPlay(e) {
-    while (playerTurn) {
-      clickCpuBoardHandler(e);
-      playerTurn = false;
-    }
-    if(!playerTurn){
-      cpuTurnFunc();
-      playerTurn = true;
-    }
-    if (playerDeadShips.length === 20) {
-      document.getElementById("winner").innerText = "CPU WINS";
-    } else if (computerDeadShips.length === 20) {
-      document.getElementById("winner").innerText = "PLAYER WINS";
-    } 
 }
 
 
 reset = document.getElementById('reset')
-reset.innerHTML='PLAY GAME'
+
 reset.addEventListener('click', function (e) {
-  init();
-  reset.innerHTML='Reset'
+init()
 })
 
