@@ -61,6 +61,7 @@ header {
   justify-content: center;
   align-items: center;
   text-align: center;
+  position: relative;
 }
 
 /*LEFT SIDE*/
@@ -144,7 +145,18 @@ header {
   position: fixed;
   right: 0;
 }
-#reset-game {
+/*RIGHTSIDE*/
+
+#main-div #right {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  height:100vh;
+}
+
+#reset {
   background-color: red;
   margin-bottom: 12vh;
   width: 150px;
@@ -155,22 +167,23 @@ header {
   font-weight: bolder;
   color: white;
   transition: all 0.2s ease-in-out;
+  position:absolute;
+  top:10px;
+  right:10px;
+  box-shadow: inset 0px 0px 15px #000000;
 }
-#reset-game:hover {
+#reset:hover {
+  background-color:black;
   transform: scale(1.1);
+  color:red;
 }
-#reset-game:active {
-  transform: scale(0.9);
+#reset:active {
+  transform: scale(1);
+  color:white;
+  background-color:red;
 }
 
-/*RIGHTSIDE*/
 
-#main-div #right {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
 /***********************************************************MAIN**********************************************************/
 
 /***********************************************************FOOTER**********************************************************/
