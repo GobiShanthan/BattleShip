@@ -12,23 +12,115 @@ let playerDeadShips = [];
 //PLAYER IS DEAD STATE
 let computerDeadShips = [];
 
+//PLAYERS TURN BOOLEAN
+let playerTurn = true;
 
+//GAME BEGINING BEGINING STATE
+let gameStart = false;
+
+//GAME BEGINING BEGINING STATE
+let messageBoard ='';
+
+
+  
+  
 const cpuAllDivs = document.getElementById("cpu-board");
 
+
+
+///////////===============================================/////////////////// GAME INITIALIZATION///////////===============================================///////////////////
+
+function init(){
+
+gameStart = false
+
+
+  ////////////////////////////////////////////////////////////////////////////RANDOM CHECKER AND IF PASSED VALIDATION PLOT SHIP END////////////////////////////////////////////////////////////////////////////////////
+
+
+
+const cpuShipOneDiv = document.getElementById("cpuS1");
+const cpuShipTwoDiv = document.getElementById("cpuS2");
+const cpuShipThreeDiv = document.getElementById("cpuS3");
+const cpuShipFourDiv = document.getElementById("cpuS4");
+const cpuShipFiveDiv = document.getElementById("cpuS5");
+
+
+//CPU AND PLAYER BOARD INIT &&  PUSH ALL EMPTY AND BORDER VALUES INTO GAME
+
+
+//GAME BOARD CPU CONTAINER
+const cpuAllDivs = document.getElementById("cpu-board");
+
+//GAME BOARD PLAYER CONTAINER
+const playerAllDivs = document.getElementById("player-board");
+
+
+//TESTING INPUT
+const testing = document.getElementById("testing")
+
+
+// EVENT HANDLERS
+cpuAllDivs.addEventListener("click", turnBasedPlay);
+
+
+
+
+
+  /*---------------------------------------------------------------SHIP CLASS SETUP START --------------------------------------------*/
+//SHIP CLASS
+class Ship {
+  constructor(name, positions, spaces, remaining) {
+    this.alive = true;
+    this.name = name;
+    this.positions = positions;
+    this.spaces = spaces;
+    this.remaining = remaining;
+  }
+  hit() {
+    this.spaces--;
+    if (this.spaces === 0) {
+      this.isDead();
+    }
+  }
+
+  isDead() {
+    this.alive = false;
+  }
+
+
+}
+
+// CREATED SHIP PLAYER
+let shipOne = new Ship("shipOne", [], 2, 2);
+let shipTwo = new Ship("shipTwo", [], 3, 3);
+let shipThree = new Ship("shipThree", [], 4, 4);
+let shipFour = new Ship("shipFour", [], 5, 5);
+let shipFive = new Ship("shipFive", [], 6, 6);
+
+//CREATED SHIP AI (CPU)
+let cpuShipOne = new Ship("shipOne", [], 2, 2);
+let cpuShipTwo = new Ship("shipTwo", [], 3, 3);
+let cpuShipThree = new Ship("shipThree", [], 4, 4);
+let cpuShipFour = new Ship("shipFour", [], 5, 5);
+let cpuShipFive = new Ship("shipFive", [], 6, 6);
+
+/*---------------------------------------------------------------SHIP CLASS SETUP END --------------------------------------------*/
+
+
+
 function turnBasedPlay(e) {
-  while (playerTurn) {
-    clickCpuBoardHandler(e);
-    playerTurn = false;
-  }
-  if(!playerTurn){
-    cpuTurnFunc();
-    playerTurn = true;
-  }
-  if (playerDeadShips.length === 20) {
-    document.getElementById("winner").innerText = "CPU WINS";
-  } else if (computerDeadShips.length === 20) {
-    document.getElementById("winner").innerText = "PLAYER WINS";
-  } 
+  if(gameStart) {
+      clickCpuBoardHandler(e);
+
+    
+    if (playerDeadShips.length === 20) {
+      document.getElementById("winner").innerText = "CPU WINS";
+    } else if (computerDeadShips.length === 20) {
+      document.getElementById("winner").innerText = "PLAYER WINS";
+    } 
+  }else null
+  
 }
 
 function cpuTurnFunc() {
@@ -72,20 +164,21 @@ function cpuTurnFunc() {
   /////////-------------------------------------------- FOR CPU SHIP AND USER GUESSING GAME START ---------------------------------------////////
   function clickCpuBoardHandler(e) {
     let myChoice = e.target.id;
-    if (e.target.id === "cpu-board") return;
+    console.log(cpuBoardData[myChoice])
   
     if (
-      cpuBoardData[myChoice] === "cpu-board" ||
       cpuBoardData[myChoice] === "miss" ||
       cpuBoardData[myChoice] === "hit"
-    )
-      return;
-    
+    ){
+      messageBoard = 'Cant pick same square again! Choose another square'
+      console.log(messageBoard)
+    }else{
 
     if (
-      cpuBoardData[myChoice] !== "hit" &&
+      cpuBoardData[myChoice] !== "hit" && cpuBoardData[myChoice] !== "miss" &&
       cpuBoardData[myChoice].slice(0, 4) === "ship"
     ) {
+      
       document.getElementById(e.target.id).style.backgroundColor = "orange";
       if (cpuBoardData[myChoice] === "shipOne") {
         cpuShipOne.hit();
@@ -112,89 +205,19 @@ function cpuTurnFunc() {
         cpuBoardData[myChoice] = "hit";
         !cpuShipFive.isAlive && computerDeadShips.push(cpuShipFive.name);
       }
+
     } else {
       cpuBoardData[myChoice] = "miss";
       document.getElementById(e.target.id).style.backgroundColor = "red";
+
     }
+    cpuTurnFunc(e)
 
-  }
-
-
-  //PLAYERS TURN BOOLEAN
-let playerTurn = true;
-
-function init(){
-
-
-
-  ////////////////////////////////////////////////////////////////////////////RANDOM CHECKER AND IF PASSED VALIDATION PLOT SHIP END////////////////////////////////////////////////////////////////////////////////////
-
-
-
-const cpuShipOneDiv = document.getElementById("cpuS1");
-const cpuShipTwoDiv = document.getElementById("cpuS2");
-const cpuShipThreeDiv = document.getElementById("cpuS3");
-const cpuShipFourDiv = document.getElementById("cpuS4");
-const cpuShipFiveDiv = document.getElementById("cpuS5");
-
-/*---------------------------------------------------------------SHIP CLASS SETUP START --------------------------------------------*/
-//SHIP CLASS
-class Ship {
-  constructor(name, positions, spaces, remaining) {
-    this.alive = true;
-    this.name = name;
-    this.positions = positions;
-    this.spaces = spaces;
-    this.remaining = remaining;
-  }
-  hit() {
-    this.spaces--;
-    if (this.spaces === 0) {
-      this.isDead();
     }
+    
+
+
   }
-
-  isDead() {
-    this.alive = false;
-  }
-}
-
-// CREATED SHIP PLAYER
-let shipOne = new Ship("shipOne", [], 2, 2);
-let shipTwo = new Ship("shipTwo", [], 3, 3);
-let shipThree = new Ship("shipThree", [], 4, 4);
-let shipFour = new Ship("shipFour", [], 5, 5);
-let shipFive = new Ship("shipFive", [], 6, 6);
-
-//CREATED SHIP AI (CPU)
-let cpuShipOne = new Ship("shipOne", [], 2, 2);
-let cpuShipTwo = new Ship("shipTwo", [], 3, 3);
-let cpuShipThree = new Ship("shipThree", [], 4, 4);
-let cpuShipFour = new Ship("shipFour", [], 5, 5);
-let cpuShipFive = new Ship("shipFive", [], 6, 6);
-
-/*---------------------------------------------------------------SHIP CLASS SETUP END --------------------------------------------*/
-
-//CPU AND PLAYER BOARD INIT &&  PUSH ALL EMPTY AND BORDER VALUES INTO GAME
-
-
-//GAME BOARD CPU CONTAINER
-const cpuAllDivs = document.getElementById("cpu-board");
-
-//GAME BOARD PLAYER CONTAINER
-const playerAllDivs = document.getElementById("player-board");
-
-
-//TESTING INPUT
-const testing = document.getElementById("testing")
-
-
-// EVENT HANDLERS
-cpuAllDivs.addEventListener("click", turnBasedPlay);
-
-//GAME BEGINING BEGINING STATE
-let gameStart = false;
-
 
 
 
@@ -936,11 +959,14 @@ function clickGameHandler(e) {
       shipPlacement(e, shipThree, "green");
     } else if (shipFour.remaining > 0) {
       shipPlacement(e, shipFour, "white");
-    } else if (shipFive.remaining > 0) {
-      shipPlacement(e, shipFive, "aqua");
-    } else {
+      
+    } else if (shipFive.remaining === 1) {
       document.getElementById("warning").innerText =
-        "Cant Click this board anymore! All peices are placed";
+        "This is the last peiece";
+        shipPlacement(e, shipFive, "aqua");
+        gameStart = true
+    }else if (shipFive.remaining > 0) {
+      shipPlacement(e, shipFive, "aqua");
     }
   }
 }
@@ -953,7 +979,8 @@ function clickGameHandler(e) {
 
 }
 
-
+init()
+gameStart = false
 reset = document.getElementById('reset')
 
 reset.addEventListener('click', function (e) {
