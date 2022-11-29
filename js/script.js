@@ -1,10 +1,10 @@
 
 // OBJECT GAME BOARD FOR CPU AND ME TO CHOOSE  (LOL NEVER AGAIN........ MABY )
-const cpuBoardData = {};
+let cpuBoardData = {};
 
 // OBJECT GAME BOARD FOR ME TO CHOOSE AND CPU TO GUESS
 
-const playerBoardData = {};
+let playerBoardData = {};
 
 //PLAYER IS DEAD STATE
 let playerDeadShips = [];
@@ -28,98 +28,18 @@ const cpuAllDivs = document.getElementById("cpu-board");
 
 
 
-///////////===============================================/////////////////// GAME INITIALIZATION///////////===============================================///////////////////
-
-function init(){
-
-gameStart = false
-
-
-  ////////////////////////////////////////////////////////////////////////////RANDOM CHECKER AND IF PASSED VALIDATION PLOT SHIP END////////////////////////////////////////////////////////////////////////////////////
-
-
-
-const cpuShipOneDiv = document.getElementById("cpuS1");
-const cpuShipTwoDiv = document.getElementById("cpuS2");
-const cpuShipThreeDiv = document.getElementById("cpuS3");
-const cpuShipFourDiv = document.getElementById("cpuS4");
-const cpuShipFiveDiv = document.getElementById("cpuS5");
-
-
-//CPU AND PLAYER BOARD INIT &&  PUSH ALL EMPTY AND BORDER VALUES INTO GAME
-
-
-//GAME BOARD CPU CONTAINER
-const cpuAllDivs = document.getElementById("cpu-board");
-
-//GAME BOARD PLAYER CONTAINER
-const playerAllDivs = document.getElementById("player-board");
-
-
-//TESTING INPUT
-const testing = document.getElementById("testing")
-
-
-// EVENT HANDLERS
-cpuAllDivs.addEventListener("click", turnBasedPlay);
-
-
-
-
-
-  /*---------------------------------------------------------------SHIP CLASS SETUP START --------------------------------------------*/
-//SHIP CLASS
-class Ship {
-  constructor(name, positions, spaces, remaining) {
-    this.alive = true;
-    this.name = name;
-    this.positions = positions;
-    this.spaces = spaces;
-    this.remaining = remaining;
-  }
-  hit() {
-    this.spaces--;
-    if (this.spaces === 0) {
-      this.isDead();
-    }
-  }
-
-  isDead() {
-    this.alive = false;
-  }
-
-
-}
-
-// CREATED SHIP PLAYER
-let shipOne = new Ship("shipOne", [], 2, 2);
-let shipTwo = new Ship("shipTwo", [], 3, 3);
-let shipThree = new Ship("shipThree", [], 4, 4);
-let shipFour = new Ship("shipFour", [], 5, 5);
-let shipFive = new Ship("shipFive", [], 6, 6);
-
-//CREATED SHIP AI (CPU)
-let cpuShipOne = new Ship("shipOne", [], 2, 2);
-let cpuShipTwo = new Ship("shipTwo", [], 3, 3);
-let cpuShipThree = new Ship("shipThree", [], 4, 4);
-let cpuShipFour = new Ship("shipFour", [], 5, 5);
-let cpuShipFive = new Ship("shipFive", [], 6, 6);
-
-/*---------------------------------------------------------------SHIP CLASS SETUP END --------------------------------------------*/
-
-
-
 function turnBasedPlay(e) {
   if(gameStart) {
       clickCpuBoardHandler(e);
 
-    
     if (playerDeadShips.length === 20) {
       document.getElementById("winner").innerText = "CPU WINS";
     } else if (computerDeadShips.length === 20) {
       document.getElementById("winner").innerText = "PLAYER WINS";
     } 
-  }else null
+  }else {
+    messageBoard ='Select your ship placements'
+  }
   
 }
 
@@ -164,7 +84,7 @@ function cpuTurnFunc() {
   /////////-------------------------------------------- FOR CPU SHIP AND USER GUESSING GAME START ---------------------------------------////////
   function clickCpuBoardHandler(e) {
     let myChoice = e.target.id;
-    console.log(cpuBoardData[myChoice])
+
   
     if (
       cpuBoardData[myChoice] === "miss" ||
@@ -218,6 +138,157 @@ function cpuTurnFunc() {
 
 
   }
+
+
+
+  /*---------------------------------------------------------------SHIP CLASS SETUP START --------------------------------------------*/
+//SHIP CLASS
+class Ship {
+  constructor(name, positions, spaces, remaining) {
+    this.alive = true;
+    this.name = name;
+    this.positions = positions;
+    this.spaces = spaces;
+    this.remaining = remaining;
+
+  }
+  hit() {
+    this.spaces--;
+    if (this.spaces === 0) {
+      this.isDead();
+    }
+  }
+
+  isDead() {
+    this.alive = false;
+  }
+
+  reset() {
+    this.setState(initialState);
+}
+
+
+}
+
+
+
+/*---------------------------------------------------------------SHIP CLASS SETUP END --------------------------------------------*/
+
+
+// EVENT HANDLERS
+cpuAllDivs.addEventListener("click", turnBasedPlay);
+
+
+///////////===============================================/////////////////// GAME INITIALIZATION///////////===============================================///////////////////
+
+function init(){
+
+  
+  
+
+// OBJECT GAME BOARD FOR CPU AND ME TO CHOOSE  (LOL NEVER AGAIN........ MABY )
+cpuBoardData = {};
+
+// OBJECT GAME BOARD FOR ME TO CHOOSE AND CPU TO GUESS
+
+playerBoardData = {};
+
+//PLAYER IS DEAD STATE
+playerDeadShips = [];
+
+//PLAYER IS DEAD STATE
+computerDeadShips = [];
+
+//PLAYERS TURN BOOLEAN
+playerTurn = true;
+
+//GAME BEGINING BEGINING STATE
+gameStart = false;
+
+//GAME BEGINING BEGINING STATE
+messageBoard ='';
+
+
+  ////////////////////////////////////////////////////////////////////////////RANDOM CHECKER AND IF PASSED VALIDATION PLOT SHIP END////////////////////////////////////////////////////////////////////////////////////
+// CREATED SHIP PLAYER
+let shipOne = new Ship("shipOne", [], 2, 2);
+let shipTwo = new Ship("shipTwo", [], 3, 3);
+let shipThree = new Ship("shipThree", [], 4, 4);
+let shipFour = new Ship("shipFour", [], 5, 5);
+let shipFive = new Ship("shipFive", [], 6, 6);
+
+//CREATED SHIP AI (CPU)
+let cpuShipOne = new Ship("shipOne", [], 2, 2);
+let cpuShipTwo = new Ship("shipTwo", [], 3, 3);
+let cpuShipThree = new Ship("shipThree", [], 4, 4);
+let cpuShipFour = new Ship("shipFour", [], 5, 5);
+let cpuShipFive = new Ship("shipFive", [], 6, 6);
+
+
+const cpuShipOneDiv = document.getElementById("cpuS1");
+const cpuShipTwoDiv = document.getElementById("cpuS2");
+const cpuShipThreeDiv = document.getElementById("cpuS3");
+const cpuShipFourDiv = document.getElementById("cpuS4");
+const cpuShipFiveDiv = document.getElementById("cpuS5");
+
+
+//CPU AND PLAYER BOARD INIT &&  PUSH ALL EMPTY AND BORDER VALUES INTO GAME
+
+
+//GAME BOARD CPU CONTAINER
+const cpuAllDivs = document.getElementById("cpu-board");
+
+//GAME BOARD PLAYER CONTAINER
+const playerAllDivs = document.getElementById("player-board");
+
+
+//TESTING INPUT
+const testing = document.getElementById("testing")
+
+
+
+
+
+//   /*---------------------------------------------------------------SHIP CLASS SETUP START --------------------------------------------*/
+
+// //SHIP CLASS
+// class Ship {
+//   constructor(name, positions, spaces, remaining) {
+//     this.alive = true;
+//     this.name = name;
+//     this.positions = positions;
+//     this.spaces = spaces;
+//     this.remaining = remaining;
+//   }
+//   hit() {
+//     this.spaces--;
+//     if (this.spaces === 0) {
+//       this.isDead();
+//     }
+//   }
+
+//   isDead() {
+//     this.alive = false;
+//   }
+
+
+// }
+
+// // CREATED SHIP PLAYER
+// let shipOne = new Ship("shipOne", [], 2, 2);
+// let shipTwo = new Ship("shipTwo", [], 3, 3);
+// let shipThree = new Ship("shipThree", [], 4, 4);
+// let shipFour = new Ship("shipFour", [], 5, 5);
+// let shipFive = new Ship("shipFive", [], 6, 6);
+
+// //CREATED SHIP AI (CPU)
+// let cpuShipOne = new Ship("shipOne", [], 2, 2);
+// let cpuShipTwo = new Ship("shipTwo", [], 3, 3);
+// let cpuShipThree = new Ship("shipThree", [], 4, 4);
+// let cpuShipFour = new Ship("shipFour", [], 5, 5);
+// let cpuShipFive = new Ship("shipFive", [], 6, 6);
+
+// /*---------------------------------------------------------------SHIP CLASS SETUP END --------------------------------------------*/
 
 
 
@@ -961,8 +1032,7 @@ function clickGameHandler(e) {
       shipPlacement(e, shipFour, "white");
       
     } else if (shipFive.remaining === 1) {
-      document.getElementById("warning").innerText =
-        "This is the last peiece";
+      messageBoard='You have chosen your last piece'
         shipPlacement(e, shipFive, "aqua");
         gameStart = true
     }else if (shipFive.remaining > 0) {
