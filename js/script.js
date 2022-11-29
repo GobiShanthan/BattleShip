@@ -251,43 +251,6 @@ const testing = document.getElementById("testing")
 
 //   /*---------------------------------------------------------------SHIP CLASS SETUP START --------------------------------------------*/
 
-// //SHIP CLASS
-// class Ship {
-//   constructor(name, positions, spaces, remaining) {
-//     this.alive = true;
-//     this.name = name;
-//     this.positions = positions;
-//     this.spaces = spaces;
-//     this.remaining = remaining;
-//   }
-//   hit() {
-//     this.spaces--;
-//     if (this.spaces === 0) {
-//       this.isDead();
-//     }
-//   }
-
-//   isDead() {
-//     this.alive = false;
-//   }
-
-
-// }
-
-// // CREATED SHIP PLAYER
-// let shipOne = new Ship("shipOne", [], 2, 2);
-// let shipTwo = new Ship("shipTwo", [], 3, 3);
-// let shipThree = new Ship("shipThree", [], 4, 4);
-// let shipFour = new Ship("shipFour", [], 5, 5);
-// let shipFive = new Ship("shipFive", [], 6, 6);
-
-// //CREATED SHIP AI (CPU)
-// let cpuShipOne = new Ship("shipOne", [], 2, 2);
-// let cpuShipTwo = new Ship("shipTwo", [], 3, 3);
-// let cpuShipThree = new Ship("shipThree", [], 4, 4);
-// let cpuShipFour = new Ship("shipFour", [], 5, 5);
-// let cpuShipFive = new Ship("shipFive", [], 6, 6);
-
 // /*---------------------------------------------------------------SHIP CLASS SETUP END --------------------------------------------*/
 
 
